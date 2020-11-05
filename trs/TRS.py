@@ -1,10 +1,11 @@
-# Reading TRS file, Showing Data, Plotting Traces
+############## Reading TRS file, Showing Data, Plotting Traces
+# Replacing with Si's TRS_reader.py
 import trsfile
 import numpy as np
 import matplotlib.pyplot as plt
 
 
-class TRS:  # Replacing with trs_reader.py from Si
+class TRS: 
     def __init__(self, trs_file_name):
         trace_root = trsfile.open(trs_file_name, 'r')
         self.pos = trace_root.engine.data_offset  # data_offset
@@ -26,7 +27,7 @@ class TRS:  # Replacing with trs_reader.py from Si
 
     def get_trace_data(self, ind):  # Gives the data of the index_th trace
         p_ind = np.zeros((1, int(self.cryptolen / 2)), np.dtype('B'))  # plaintext
-        c_ind = np.zeros((1, int(self.cryptolen / 2)), np.dtype('B'))  # cipher_text
+        c_ind = np.zeros((1, int(self.cryptolen / 2)), np.dtype('B'))  # ciphertext
         d_ind = self.traces[ind].data
         half_cryptolen = int(self.cryptolen/2)
         if ind < self.number_of_traces:  # Check the correctness of the number_of_traces
@@ -58,7 +59,7 @@ class TRS:  # Replacing with trs_reader.py from Si
 
 
 if __name__ == "__main__":
-    trs = TRS('si_trs.trs')  # The name of the trs file (name.trs)
+    trs = TRS('trs4.trs')  # The name of the trs file (name.trs)
 
     trs.plot_initial()
     for i in range(trs.number_of_traces):
