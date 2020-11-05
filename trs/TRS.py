@@ -58,7 +58,7 @@ class TRS:  # Replacing with trs_reader.py from Si
 
 
 if __name__ == "__main__":
-    trs = TRS('si_trs.trs')  # Just change the name of the trs file (name.trs)
+    trs = TRS('si_trs.trs')  # The name of the trs file (name.trs)
 
     trs.plot_initial()
     for i in range(trs.number_of_traces):
