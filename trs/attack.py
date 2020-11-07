@@ -37,15 +37,6 @@ class AESAttack:
         y = bin(x).count("1")
         return y
 
-    def max_corr(self, hw_vector, traces):
-        max_corr_value = 0
-        corr_vec = np.zeros(self.trs.number_of_samples)
-        for i in range(self.trs.number_of_samples):
-            [corr_ves[i], pv] = pearsonr(hw_vector, traces[:, i])
-            if abs(corr_vec[i]) > max_corr_value:
-                max_corr_value = abs(corr_vec[i])
-        return [max_corr_value, corr_vec]
-
     def hw_model_all_p_key(self):
         n_traces = self.trs.number_of_traces
         hw_vec_guess = np.zeros((n_traces, int(self.trs.cryptolen / 2), 256)).astype(int)
