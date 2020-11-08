@@ -38,20 +38,27 @@ class AESAttack:
         return y
 
     def hw_model_all_p_key(self):
+        """ This function computes HW of the S_BOX output for all bytes of key (256) and n 16_byte plaintexts"""
+        """ --> hw_vec_guess(n, 16,256)"""
         n_traces = self.trs.number_of_traces
-        hw_vec_guess = np.zeros((n_traces, int(self.trs.cryptolen / 2), 256)).astype(int)
+        hw_vec_guess = np.zeros((n_traces, int(self.trs.cryptolen / 2), 256)).astype(int) # Array of hw_vec
         pt = np.zeros((n_traces, int(self.trs.cryptolen / 2)), np.dtype('B'))  # Array of plaintexts
         for i in range(n_traces):
-            # Extracting plaintext
+            # Extracting plaintext from TRS file
             [pt_ind, ct_ind] = self.trs.get_trace_data(i)
-            pt[i] = pt_ind
-            for j in range(int(self.trs.cryptolen / 2)):
-                for k_guess in range(256):
-                    sb_out = self.s_box_output(pt[i][j], k_guess)
-                    hw_vec_guess[i][j][k_guess] = self.hw(sb_out)
+            pt[i] = pt_ind[0] # Extracting the first byte of plaintext
+            # pt[i] = pt_ind # Extracting all 16 bytes of plaintext
+            # for j in range(int(self.trs.cryptolen / 2)): # When all 16 bytes are used
+            for k_guess in range(256):
+                # x = pt[i, 0] # The first byte of plaintext
+                sb_out = self.s_box_output(pt[i, 0], k_guess)
+                # sb_out = self.s_box_output(pt[i, j], k_guess) # When all 16 bytes are used
+                hw_vec_guess[i, 0, k_guess] = self.hw(sb_out)
+                # hw_vec_guess[i, j, k_guess] = self.hw(sb_out) # When all 16 bytes are used
         return hw_vec_guess
 
     def traces(self):
+        """ This function extracts all traces from TRS file"""
         n_traces = self.trs.number_of_traces
         all_traces = np.zeros((n_traces, self.trs.number_of_samples), np.int16)  # Array of samples of each trace
         for i in range(n_traces):
@@ -59,17 +66,38 @@ class AESAttack:
         return all_traces
 
     def leakage_traces(self):
-        # This function returns transparent traces that is used in corr(hw_vector,leakage_traces)
+        """ This function returns transparent traces that is used in corr(hw_vector,leakage_traces)"""
         traces = self.traces()
         trans_traces = traces.transpose()
         return trans_traces
 
+    def attack_dpa(self, hw_ve, leak_traces):
+        """ This function computes the correlation between HW and leakage traces and"""
+        """ finally, finds the correct key"""
+        leak_traces = self.leakage_traces()
+        hw_ve = self.hw_model_all_p_key()
+        n_samples = self.trs.number_of_samples
+        max_corr = 0
+        corr = np.zeros(n_samples)
+        for i in range(5, n_samples):
+            # for j in range(int(self.trs.cryptolen / 2)): # When all 16 bytes are used
+            for k_g in range(256):
+                c = hw_ve[:, 0, k_g]
+                d = leak_traces[i]
+                # [corr[i], p_value] = pearsonr(hw_ve[:, j, k_g], leak_traces[i]) # When all 16 bytes are used
+                [corr[i], p_value] = pearsonr(hw_ve[:, 0, k_g], leak_traces[i])
+                if (abs(corr[i]) > max_corr):
+                    max_corr = abs(corr[i])
+                    correct_key = k_g
+        return [max_corr, hex(correct_key), corr]
+
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('si_trs.trs')
+    aes_attack.read_trs('trs73.trs')
     tr = aes_attack.traces()
     hw_v = aes_attack.hw_model_all_p_key()
     tr_tr = aes_attack.leakage_traces()
     gk = aes_attack.hw_model_all_p_key()
-
+    chw = aes_attack.attack_dpa(hw_v, tr_tr)
+    print(aes_attack.attack_dpa(hw_v, tr_tr))
