@@ -1,5 +1,4 @@
 ############## Reading TRS file, Showing Data, Plotting Traces
-# Replacing with Si's TRS_reader.py
 import trsfile
 import numpy as np
 import matplotlib.pyplot as plt
