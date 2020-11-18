@@ -98,7 +98,7 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('trs_key_16_sbox16.trs')
+    aes_attack.read_trs('si_trs.trs')
     p_len = int(aes_attack.trs.cryptolen / 2)
 
     for i in range(p_len):
