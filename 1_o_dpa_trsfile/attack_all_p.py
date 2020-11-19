@@ -26,6 +26,9 @@ class AESAttack:
 
     def read_trs(self, filename):
         self.trs = TRS(filename)
+        self.n_t = self.trs.number_of_traces
+        self.n_s = self.trs.number_of_samples
+        self.len_p = self.trs.cryptolen
 
     def s_box_output(self, p, k):
         y = np.zeros(1).astype(int)
@@ -40,10 +43,9 @@ class AESAttack:
     def hw_model_all_p_key(self):
         """ This function computes HW of the S_BOX output for all bytes of key (256) and n 16_byte plaintexts"""
         """ --> hw_vec_guess(n, 16,256)"""
-        n_traces = self.trs.number_of_traces
-        hw_vec_guess = np.zeros((n_traces, int(self.trs.cryptolen / 2), 256)).astype(int) # Array of hw_vec
-        pt = np.zeros((n_traces, int(self.trs.cryptolen / 2)), np.dtype('B'))  # Array of plaintexts
-        for i in range(n_traces):
+        hw_vec_guess = np.zeros((self.n_t, int(self.trs.cryptolen / 2), 256)).astype(int) # Array of hw_vec
+        pt = np.zeros((self.n_t, int(self.trs.cryptolen / 2)), np.dtype('B'))  # Array of plaintexts
+        for i in range(self.n_t):
             # Extracting plaintext from TRS file
             [pt_ind, ct_ind] = self.trs.get_trace_data(i)
             pt[i] = pt_ind # Extracting all 16 bytes of plaintext
@@ -55,9 +57,8 @@ class AESAttack:
 
     def traces(self):
         """ This function extracts all traces from TRS file"""
-        n_traces = self.trs.number_of_traces
-        all_traces = np.zeros((n_traces, self.trs.number_of_samples), np.int16)  # Array of samples of each trace
-        for i in range(n_traces):
+        all_traces = np.zeros((self.n_t, self.n_s), np.int16)  # Array of samples of each trace
+        for i in range(self.n_t):
             all_traces[i] = self.trs.get_trace_sample(i)
         return all_traces
 
@@ -69,22 +70,20 @@ class AESAttack:
 
     def compute_corr(self, hw_vector, leak_traces):
         """ This function computes correlation between HW vector and all leakage_traces """
-        n_samples = self.trs.number_of_samples
         max_corr = 0
-        corr = np.zeros(n_samples)
-        for i in range(n_samples):
+        corr = np.zeros(self.n_s)
+        for i in range(self.n_s):
             [corr[i], p_value] = pearsonr(hw_vector, leak_traces[i])
             if (abs(corr[i]) > max_corr):
                 max_corr = abs(corr[i])
         return [max_corr, corr]
 
     def attack_dpa(self, hw_ve, leak_traces):
-        p_len = int(self.trs.cryptolen / 2)
-        n_samples = self.trs.number_of_samples
+        p_len = int(self.len_p / 2)
         max_corr = np.zeros(p_len)
         max_corr_k = np.zeros(p_len)
         correct_key = np.zeros(p_len)
-        corr = np.zeros((256, p_len, n_samples))
+        corr = np.zeros((256, p_len, self.n_s))
         for j in range(p_len):
             for k_g in range(256):
                 [max_corr[j], corr[k_g, j]] = self.compute_corr(hw_ve[:, j, k_g], leak_traces)
@@ -99,7 +98,7 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('se_trs.trs')
+    aes_attack.read_trs('si_trs.trs')
     hw_vectors = aes_attack.hw_model_all_p_key()
     leakage_traces = aes_attack.leakage_traces()
     attack = aes_attack.attack_dpa(hw_vectors, leakage_traces)

@@ -68,7 +68,7 @@ class TRS:
 
 
 if __name__ == "__main__":
-    trs = TRS('trs90.trs')  # The name of the trs file (name.trs)
+    trs = TRS('si_trs.trs')  # The name of the trs file (name.trs)
 
     trs.plot_initial()
     for i in range(trs.number_of_traces):
