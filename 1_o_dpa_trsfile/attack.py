@@ -81,6 +81,7 @@ class AESAttack:
     def attack_dpa(self, hw_ve, leak_traces):
         max_corr = 0
         max_corr_k = 0
+        correct_key = 0
         corr = np.zeros((256, self.n_s))
         self.trs.plot_initial()
         for k_g in range(256):
@@ -97,7 +98,7 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('si_trs.trs')
+    aes_attack.read_trs('trs73.trs')
     hw_v = aes_attack.hw_model_all_p_key()
     leakage_traces = aes_attack.leakage_traces()
     attack = aes_attack.attack_dpa(hw_v, leakage_traces)

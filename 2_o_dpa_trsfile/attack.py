@@ -69,58 +69,58 @@ class AESAttack:
             mean_samp[i] = np.mean(all_traces[:, i])
         return mean_samp
 
-    def centering_sample(self, trace):
+    def centering_trace(self, trace, mean_sam):
         """ This function centers to zero all samples in a single trace """
-        n_samples = len(trace)  # n_samples = self.trs.number_of_samples
-        mean_sam = self.mean_sample()
-        centering = np.zeros(n_samples)
+        n_samples = len(trace)  # n_samples = self.n_s = self.trs.number_of_samples
+        # mean_sam = self.mean_sample()
+        centered_trace = np.zeros(n_samples)
         for i in range(n_samples):
-            centering[i] = trace[i] - mean_sam[i]
-        return centering
+            centered_trace[i] = trace[i] - mean_sam[i]
+        return centered_trace
 
-    def centering_all_traces(self):
-        """ This function centers to zero all samples in all trace """
-        all_traces = self.traces()
-        all_cent = np.zeros((self.n_t, self.n_s))
-        for i in range(self.n_t):
-            all_cent[i] = self.centering_sample(all_traces[i])
-        return all_cent
+    # def centering_all_traces(self):
+    #     """ This function centers to zero all samples in all trace """
+    #     all_traces = self.traces()
+    #     all_centred_trace = np.zeros((self.n_t, self.n_s))
+    #     for i in range(self.n_t):
+    #         all_centred_trace[i] = self.centering_trace(all_traces[i], mean_sam)
+    #     return all_centred_trace
 
-    def multiply(self, trace):
-        """ This function calculates (S_i * S_j) i=[0:n], j=[i+1:n] where n is the number of samples"""
-        """ and returns a n*(n-1)/2_vector """
-        n = len(trace)  # n_samples = self.trs.number_of_samples
-        self.n_multi = int((n * (n - 1))/2)
-        multiply = np.zeros(self.n_multi)
+    def product_samples(self, trace):
+        """ This function calculates (S_i * S_j) i=[0:n_s], j=[i+1:n_s] for a single trace,
+            where n is the number of samples and returns a [n_s * (n_s - 1)/2]_vector """
+        n = len(trace)  # self.n_s = n_samples = self.trs.number_of_samples
+        n_s = int((n * (n - 1))/2)
+        product_sam = np.zeros(n_s)
         i = 0
         for j in range(n):
             for k in range(j+1, n):
-                if j == k:
-                    continue
-                multiply[i] = a[j] * a[k]
+                # if j == k:
+                #     continue
+                product_sam[i] = trace[j] * trace[k]
                 i += 1
-        return multiply
+        return product_sam
 
-    def centered_product(self):
-        """ This function"""
-        centered_traces = self.centering_all_traces()
-        combined_traces = np.zeros((self.n_t, self.n_multi))
+    def cent_prod_combining_trace(self, trace, mean_sam):
+        """ This function computes returns a trace that is centered and product (n_s * (n_s - 1)/2_vector)"""
+        centered_trace = self.centering_trace(trace, mean_sam)
+        cent_prod_c_trace = self.product_samples(centered_trace)  # (n_s * (n_s - 1)/2_vector)
+        return cent_prod_c_trace
+
+    def comb_traces(self):
+        """ This function returns all traces from centred product combining function
+            which are used as new traces in dpa attack"""
+        traces = self.traces()
+        mean_sam = self.mean_sample()
+        n = int((self.n_s * (self.n_s - 1)) / 2)
+        combined_traces = np.zeros((self.n_t, n), np.int16)  # Array of centered_product_samples of each trace
         for i in range(self.n_t):
-            cent_trace = centered_traces[i]
-            combined_traces[i] = self.multiply(cent_trace)
+            combined_traces[i] = self.cent_prod_combining_trace(traces[i], mean_sam)
         return combined_traces
-            
-
-
-
-
-
-
-
 
     def leakage_traces(self):
         """ This function returns transparent traces that is used in corr(hw_vector,leakage_traces)"""
-        traces = self.traces()
+        traces = self.comb_traces()
         trans_traces = traces.transpose()
         return trans_traces
 
@@ -136,11 +136,12 @@ class AESAttack:
     def attack_dpa(self, hw_ve, leak_traces):
         max_corr = 0
         max_corr_k = 0
+        correct_key = 0
         corr = np.zeros((256, self.n_s))
         self.trs.plot_initial()
         for k_g in range(256):
             [max_corr, corr[k_g]] = self.compute_corr(hw_ve[:, 0, k_g], leak_traces)
-            if (max_corr > max_corr_k):
+            if max_corr > max_corr_k:
                 max_corr_k = max_corr
                 correct_key = k_g
             self.trs.plot_trace_input(corr[k_g])
@@ -152,15 +153,10 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('trs39.trs')
-    me = aes_attack.mean_sample()
-    print(me)
-    cea_ll = aes_attack.centering_all_traces()
+    aes_attack.read_trs('2sh_b6.trs')
+    # mean_samp = aes_attack.mean_sample()
 
-    a=1
-
-    print(cea_ll)
-    # hw_v = aes_attack.hw_model_all_p_key()
-    # leakage_traces = aes_attack.leakage_traces()
-    # attack = aes_attack.attack_dpa(hw_v, leakage_traces)
+    hw_v = aes_attack.hw_model_all_p_key()
+    leakage_traces = aes_attack.leakage_traces()
+    attack = aes_attack.attack_dpa(hw_v, leakage_traces)
 
