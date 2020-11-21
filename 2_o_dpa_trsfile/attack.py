@@ -28,6 +28,7 @@ class AESAttack:
         self.trs = TRS(filename)
         self.n_t = self.trs.number_of_traces
         self.n_s = self.trs.number_of_samples
+        self.n_s_c_p = int((self.n_s * (self.n_s - 1)) / 2)  # The number of samples in a centered product trace
         self.len_p = self.trs.cryptolen
 
     def s_box_output(self, p, k):
@@ -90,8 +91,7 @@ class AESAttack:
         """ This function calculates (S_i * S_j) i=[0:n_s], j=[i+1:n_s] for a single trace,
             where n is the number of samples and returns a [n_s * (n_s - 1)/2]_vector """
         n = len(trace)  # self.n_s = n_samples = self.trs.number_of_samples
-        n_s = int((n * (n - 1))/2)
-        product_sam = np.zeros(n_s)
+        product_sam = np.zeros(self.n_s_c_p)
         i = 0
         for j in range(n):
             for k in range(j+1, n):
@@ -110,8 +110,7 @@ class AESAttack:
             which are used as new traces in dpa attack"""
         traces = self.traces()
         mean_sam = self.mean_sample()
-        n = int((self.n_s * (self.n_s - 1)) / 2)
-        combined_traces = np.zeros((self.n_t, n), np.int16)  # Array of centered_product_samples of each trace
+        combined_traces = np.zeros((self.n_t, self.n_s_c_p))  # Array of centered_product_samples of each trace
         for i in range(self.n_t):
             combined_traces[i] = self.cent_prod_combining_trace(traces[i], mean_sam)
         return combined_traces
@@ -124,10 +123,10 @@ class AESAttack:
 
     def compute_corr(self, hw_vector, leak_traces):
         max_corr = 0
-        corr = np.zeros(self.n_s)
-        for i in range(self.n_s):
+        corr = np.zeros(self.n_s_c_p)
+        for i in range(self.n_s_c_p):
             [corr[i], p_value] = pearsonr(hw_vector, leak_traces[i])
-            if (abs(corr[i]) > max_corr):
+            if abs(corr[i]) > max_corr:
                 max_corr = abs(corr[i])
         return [max_corr, corr]
 
@@ -135,7 +134,7 @@ class AESAttack:
         max_corr = 0
         max_corr_k = 0
         correct_key = 0
-        corr = np.zeros((256, self.n_s))
+        corr = np.zeros((256, self.n_s_c_p))
         self.trs.plot_initial()
         for k_g in range(256):
             [max_corr, corr[k_g]] = self.compute_corr(hw_ve[:, 0, k_g], leak_traces)
@@ -151,10 +150,10 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('2sh_b6.trs')
+    aes_attack.read_trs('2sh_84_200.trs')
     # mean_samp = aes_attack.mean_sample()
 
     hw_v = aes_attack.hw_model_all_p_key()
     leakage_traces = aes_attack.leakage_traces()
     attack = aes_attack.attack_dpa(hw_v, leakage_traces)
-
+a=1
