@@ -95,14 +95,12 @@ class AESAttack:
         i = 0
         for j in range(n):
             for k in range(j+1, n):
-                # if j == k:
-                #     continue
                 product_sam[i] = trace[j] * trace[k]
                 i += 1
         return product_sam
 
     def cent_prod_combining_trace(self, trace, mean_sam):
-        """ This function computes returns a trace that is centered and product (n_s * (n_s - 1)/2_vector)"""
+        """ This function returns a trace that is centered and product (n_s * (n_s - 1)/2_vector)"""
         centered_trace = self.centering_trace(trace, mean_sam)
         cent_prod_c_trace = self.product_samples(centered_trace)  # (n_s * (n_s - 1)/2_vector)
         return cent_prod_c_trace
