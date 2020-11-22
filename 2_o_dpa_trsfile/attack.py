@@ -126,6 +126,7 @@ class AESAttack:
         corr = np.zeros(self.n_s_c_p)
         for i in range(self.n_s_c_p):
             [corr[i], p_value] = pearsonr(hw_vector, leak_traces[i])
+
             if abs(corr[i]) > max_corr:
                 max_corr = abs(corr[i])
         return [max_corr, corr]
@@ -158,4 +159,3 @@ if __name__ == "__main__":
     hw_v = aes_attack.hw_model_all_p_key()
     leakage_traces = aes_attack.leakage_traces()
     attack = aes_attack.attack_dpa(hw_v, leakage_traces)
-a=1
