@@ -15,6 +15,9 @@ The combination function is the Centered_Product function[4].
 
 
 [1] https://github.com/knarfrank/Higher-Order-Masked-AES-128
+
 [2] https://github.com/sca-research/GILES
+
 [3] https://www.riscure.com/security-tools/inspector-sca/
+
 [4] P.R.B: “Statistical analysis of second order differentialpower analysis,”IEEE Transactions on computers 2009"
