@@ -145,12 +145,14 @@ class AESAttack:
         self.trs.phrase_plot(correct_key)
         self.trs.plot_show('Samples', 'Correlation', 'Corr(HW, traces)', 'corr')
         print('The first byte of the key is:', hex(correct_key))
+        print('Max Corr is:', max_corr_k)
+
         return [max_corr, hex(correct_key), corr]
 
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('2sh_84_200.trs')
+    aes_attack.read_trs('2sh_bc_170.trs')
     # mean_samp = aes_attack.mean_sample()
 
     hw_v = aes_attack.hw_model_all_p_key()
