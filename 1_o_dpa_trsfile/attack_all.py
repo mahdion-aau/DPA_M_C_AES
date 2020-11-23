@@ -68,37 +68,38 @@ class AESAttack:
         return trans_traces
 
     def compute_corr(self, hw_vector, leak_traces):
+        """ This function computes correlation between HW vector and all leakage_traces """
         max_corr = 0
         corr = np.zeros(self.n_s)
         for i in range(self.n_s):
             [corr[i], p_value] = pearsonr(hw_vector, leak_traces[i])
-            if (abs(corr[i]) > max_corr):
+            if abs(corr[i]) > max_corr:
                 max_corr = abs(corr[i])
         return [max_corr, corr]
 
-    def attack_dpa(self, hw_ve, leak_traces, p_len):
-        """ This function recovers the p_len th byte of the key"""
+    def attack_dpa(self, hw_ve, leak_traces, i_p_len):
+        """ This function recovers the p_len th byte of the key """
         max_corr = 0
         max_corr_k = 0
         corr = np.zeros((256, self.n_s))
         correct_key = 0
         self.trs.plot_initial()
         for k_g in range(256):
-            [max_corr, corr[k_g]] = self.compute_corr(hw_ve[:, p_len, k_g], leak_traces)
-            if (max_corr > max_corr_k):
+            [max_corr, corr[k_g]] = self.compute_corr(hw_ve[:, i_p_len, k_g], leak_traces)
+            if max_corr > max_corr_k:
                 max_corr_k = max_corr
                 correct_key = k_g
             self.trs.plot_trace_input(corr[k_g])
         self.trs.phrase_plot(correct_key)
-        self.trs.plot_show('Samples', 'Correlation [-1, 1]', 'Byte {0} = 0x{1:2x}'.format(p_len, correct_key), 'corr')
-        print('Byte {0} = 0x{1:2x}'.format(p_len, correct_key))
+        self.trs.plot_show('Samples', 'Correlation [-1, 1]', 'Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key), 'corr')
+        print('Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key))
         return [max_corr, hex(correct_key), corr]
 
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
     aes_attack.read_trs('si_trs.trs')
-    p_len = int(aes_attack.trs.cryptolen / 2)
+    p_len = int(aes_attack.len_p / 2)
 
     for i in range(p_len):
         hw_v = aes_attack.hw_model_all_p_key(i)

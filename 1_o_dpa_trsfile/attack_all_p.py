@@ -43,13 +43,13 @@ class AESAttack:
     def hw_model_all_p_key(self):
         """ This function computes HW of the S_BOX output for all bytes of key (256) and n 16_byte plaintexts"""
         """ --> hw_vec_guess(n, 16,256)"""
-        hw_vec_guess = np.zeros((self.n_t, int(self.trs.cryptolen / 2), 256)).astype(int) # Array of hw_vec
-        pt = np.zeros((self.n_t, int(self.trs.cryptolen / 2)), np.dtype('B'))  # Array of plaintexts
+        hw_vec_guess = np.zeros((self.n_t, int(self.len_p / 2), 256)).astype(int) # Array of hw_vec
+        pt = np.zeros((self.n_t, int(self.len_p / 2)), np.dtype('B'))  # Array of plaintexts
         for i in range(self.n_t):
             # Extracting plaintext from TRS file
             [pt_ind, ct_ind] = self.trs.get_trace_data(i)
             pt[i] = pt_ind # Extracting all 16 bytes of plaintext
-            for j in range(int(self.trs.cryptolen / 2)):
+            for j in range(int(self.len_p / 2)):
                 for k_guess in range(256):
                     sb_out = self.s_box_output(pt[i, j], k_guess)
                     hw_vec_guess[i, j, k_guess] = self.hw(sb_out)
@@ -74,7 +74,7 @@ class AESAttack:
         corr = np.zeros(self.n_s)
         for i in range(self.n_s):
             [corr[i], p_value] = pearsonr(hw_vector, leak_traces[i])
-            if (abs(corr[i]) > max_corr):
+            if abs(corr[i]) > max_corr:
                 max_corr = abs(corr[i])
         return [max_corr, corr]
 
@@ -87,7 +87,7 @@ class AESAttack:
         for j in range(p_len):
             for k_g in range(256):
                 [max_corr[j], corr[k_g, j]] = self.compute_corr(hw_ve[:, j, k_g], leak_traces)
-                if (max_corr[j] > max_corr_k[j]):
+                if max_corr[j] > max_corr_k[j]:
                     max_corr_k[j] = max_corr[j]
                     correct_key[j] = k_g
         print('The key is: ')
