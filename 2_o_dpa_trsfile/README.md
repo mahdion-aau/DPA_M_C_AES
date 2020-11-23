@@ -8,9 +8,7 @@ TRS.py module uses trsfile (a library published by Riscure[1]) for extracting tr
 
 attack.py extracts the first byte of the key.
 
-attack_all_p.py extracts all 16 bytes of the key. 
-
-attack_all.py extracts all byte of the key by using a function that extracts 1 byte, and also plots corr_traces seperately.
+attack_all.py extracts all byte of the key and also plots corr_traces separately.
 
 
 [1]  https://github.com/Riscure/python-trsfile
