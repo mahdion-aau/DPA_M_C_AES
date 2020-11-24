@@ -89,21 +89,26 @@ class AESAttack:
                 max_corr = abs(corr[i])
         return [max_corr, corr]
 
-    def attack_dpa(self, hw_ve, leak_traces, i_p_len):
-        """ This function recovers the p_len th byte of the key """
+    def attack_dpa(self, hw_ve,ax, leak_traces, i_p_len):
+        """ This function extracts the (p_len)_th byte of the key """
+        ax.clear()
         max_corr = 0
         max_corr_k = 0
         corr = np.zeros((256, self.n_s))
         correct_key = 0
-        self.trs.plot_initial()
         for k_g in range(256):
             [max_corr, corr[k_g]] = self.compute_corr(hw_ve[:, i_p_len, k_g], leak_traces)
             if max_corr > max_corr_k:
                 max_corr_k = max_corr
                 correct_key = k_g
-            self.trs.plot_trace_input(corr[k_g])
-        self.trs.phrase_plot(correct_key)
-        self.trs.plot_show('Samples', 'Correlation [-1, 1]', 'Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key), 'corr')
+            ax.plot(corr)
+        ax.set_xlim([1, self.n_t])
+        ax.set_ylim([-1, 1])
+        ax.title.set_text('Byte {0}=0x{1:2x}'.format(i_p_len, correct_key))
+        ax.set_xlabel('Samples')
+        ax.set_ylabel('Correlation')
+        # self.trs.phrase_plot(correct_key)
+        # self.trs.plot_show('Samples', 'Correlation [-1, 1]', 'Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key), 'corr')
         print('Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key))
         return [max_corr, hex(correct_key), corr]
 
@@ -112,8 +117,41 @@ if __name__ == "__main__":
     aes_attack = AESAttack()
     aes_attack.read_trs('si_trs.trs')
     p_len = int(aes_attack.len_p / 2)
-
+    plt.ion()
+    fig = plt.figure()
+    ax = []
     for i in range(p_len):
+        ax.append(fig.add_subplot(4, 4, i + 1))
+
         hw_v = aes_attack.hw_model_all_p_key(i)
         leakage_traces = aes_attack.leakage_traces()
-        attack = aes_attack.attack_dpa(hw_v, leakage_traces, i)
+        attack = aes_attack.attack_dpa(hw_v, ax[i], leakage_traces, i)
+
+        fig.canvas.draw()
+        fig.canvas.flush_events()
+        plt.show()
+        plt.tight_layout()
+        plt.pause(.001)
+
+    plt.ioff()
+    plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
