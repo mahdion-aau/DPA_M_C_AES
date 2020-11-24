@@ -89,7 +89,7 @@ class AESAttack:
                 max_corr = abs(corr[i])
         return [max_corr, corr]
 
-    def attack_dpa(self, hw_ve,ax, leak_traces, i_p_len):
+    def attack_dpa(self, hw_ve, ax, leak_traces, i_p_len):
         """ This function extracts the (p_len)_th byte of the key """
         ax.clear()
         max_corr = 0
@@ -107,8 +107,6 @@ class AESAttack:
         ax.title.set_text('Byte {0}=0x{1:2x}'.format(i_p_len, correct_key))
         ax.set_xlabel('Samples')
         ax.set_ylabel('Correlation')
-        # self.trs.phrase_plot(correct_key)
-        # self.trs.plot_show('Samples', 'Correlation [-1, 1]', 'Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key), 'corr')
         print('Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key))
         return [max_corr, hex(correct_key), corr]
 
