@@ -79,14 +79,6 @@ class AESAttack:
             centered_trace[i] = trace[i] - mean_sam[i]
         return centered_trace
 
-    # def centering_all_traces(self):
-    #     """ This function centers to zero all samples in all trace """
-    #     all_traces = self.traces()
-    #     all_centred_trace = np.zeros((self.n_t, self.n_s))
-    #     for i in range(self.n_t):
-    #         all_centred_trace[i] = self.centering_trace(all_traces[i], mean_sam)
-    #     return all_centred_trace
-
     def product_samples(self, trace):
         """ This function calculates (S_i * S_j) i=[0:n_s], j=[i+1:n_s] for a single trace,
             where n is the number of samples and returns a [n_s * (n_s - 1)/2]_vector """
@@ -121,17 +113,28 @@ class AESAttack:
         trans_traces = traces.transpose()
         return trans_traces
 
+    def pearson_corr(self, hw_ve, leak_trc):
+        """ When an input of pearsonr is constant, the output of pearsonr is Nan,
+         so there is a warning for solving this warning pearson_check function is defined"""
+        def all_same(in_array):
+            return all(x == in_array[0] for x in in_array)
+        if all_same(hw_ve) ^ all_same(leak_trc):
+            corr_pea = 0
+        else:
+            [corr_pea, p_val] = pearsonr(hw_ve, leak_trc)
+        return corr_pea
+
     def compute_corr(self, hw_vector, leak_traces):
         max_corr = 0
         corr = np.zeros(self.n_s_c_p)
         for i in range(self.n_s_c_p):
-            [corr[i], p_value] = pearsonr(hw_vector, leak_traces[i])
+            corr[i] = self.pearson_corr(hw_vector, leak_traces[i])
             if abs(corr[i]) > max_corr:
                 max_corr = abs(corr[i])
         return [max_corr, corr]
 
     def attack_dpa(self, hw_ve, leak_traces, i_p_len):
-        """ This function recovers the p_len th byte of the key"""
+        """ This function recovers (the p_len)_th byte of the key"""
         max_corr = 0
         max_corr_k = 0
         corr = np.zeros((256, self.n_s_c_p))
@@ -151,7 +154,7 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('2sh_16_b_200.trs')
+    aes_attack.read_trs('2sh_16b_400.trs')
     p_len = aes_attack.n_s_c_p
 
     for i in range(p_len):

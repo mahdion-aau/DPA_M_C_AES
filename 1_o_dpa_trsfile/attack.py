@@ -69,12 +69,25 @@ class AESAttack:
         trans_traces = traces.transpose()
         return trans_traces
 
+    def pearson_corr(self, hw_ve, leak_trc):
+        """ When an input of pearsonr is constant, the output of pearsonr is Nan,
+         so there is a warning for solving this warning pearson_check function is defined"""
+
+        def all_same(in_array):
+            return all(x == in_array[0] for x in in_array)
+
+        if all_same(hw_ve) ^ all_same(leak_trc):
+            corr_pea = 0
+        else:
+            [corr_pea, p_val] = pearsonr(hw_ve, leak_trc)
+        return corr_pea
+
     def compute_corr(self, hw_vector, leak_traces):
         max_corr = 0
         corr = np.zeros(self.n_s)
         for i in range(self.n_s):
-            [corr[i], p_value] = pearsonr(hw_vector, leak_traces[i])
-            if (abs(corr[i]) > max_corr):
+            corr[i] = self.pearson_corr(hw_vector, leak_traces[i])
+            if abs(corr[i]) > max_corr:
                 max_corr = abs(corr[i])
         return [max_corr, corr]
 
