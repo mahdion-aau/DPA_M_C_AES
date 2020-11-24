@@ -101,13 +101,15 @@ class AESAttack:
             if max_corr > max_corr_k:
                 max_corr_k = max_corr
                 correct_key = k_g
-            ax.plot(corr)
-        ax.set_xlim([1, self.n_t])
-        ax.set_ylim([-1, 1])
+            ax.plot(corr[k_g])
+        ax.set_xlim([1, len(corr[0])])
+        # ax.set_ylim([-1, 1])
         ax.title.set_text('Byte {0}=0x{1:2x}'.format(i_p_len, correct_key))
-        ax.set_xlabel('Samples')
+        ax.set_xlabel('N_traces')
         ax.set_ylabel('Correlation')
         print('Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key))
+        print('Maximum correlation is: '.format(max_corr_k))
+        print('__________________________________________')
         return [max_corr, hex(correct_key), corr]
 
 
