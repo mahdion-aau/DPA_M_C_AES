@@ -119,13 +119,13 @@ if __name__ == "__main__":
     p_len = int(aes_attack.len_p / 2)
     plt.ion()
     fig = plt.figure()
-    ax = []
+    i_ax = []
     for i in range(p_len):
-        ax.append(fig.add_subplot(4, 4, i + 1))
+        i_ax.append(fig.add_subplot(4, 4, i + 1))
 
         hw_v = aes_attack.hw_model_all_p_key(i)
         leakage_traces = aes_attack.leakage_traces()
-        attack = aes_attack.attack_dpa(hw_v, ax[i], leakage_traces, i)
+        attack = aes_attack.attack_dpa(hw_v, i_ax[i], leakage_traces, i)
 
         fig.canvas.draw()
         fig.canvas.flush_events()
