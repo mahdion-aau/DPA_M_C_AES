@@ -108,7 +108,7 @@ class AESAttack:
         ax.set_xlabel('N_traces')
         ax.set_ylabel('Correlation')
         print('Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key))
-        print('Maximum correlation is: '.format(max_corr_k))
+        print('Maximum correlation is: {} '.format(max_corr_k))
         print('__________________________________________')
         return [max_corr, hex(correct_key), corr]
 
