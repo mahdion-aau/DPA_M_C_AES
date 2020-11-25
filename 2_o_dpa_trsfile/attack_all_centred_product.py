@@ -149,7 +149,7 @@ class AESAttack:
         ax.set_xlim([1, len(corr[0])])
         # ax.set_ylim([-1, 1])
         ax.title.set_text('Byte {0}=0x{1:2x}'.format(i_p_len, correct_key))
-        ax.set_xlabel('N_traces')
+        ax.set_xlabel('Samples')
         ax.set_ylabel('Correlation')
         print('Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key))
         print('Maximum correlation is: {} '.format(max_corr_k))
