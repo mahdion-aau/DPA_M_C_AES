@@ -28,7 +28,7 @@ class AESAttack:
         self.trs = TRS(filename)
         self.n_t = self.trs.number_of_traces
         self.n_s = self.trs.number_of_samples
-        self.n_s_c_p = int((self.n_s * (self.n_s - 1)) / 2)  # The number of samples in a centered product trace
+        self.n_s_c_p = int((self.n_s * (self.n_s - 1)) / 2)  # The number of samples in a centered trace
         self.len_p = self.trs.cryptolen
 
     def s_box_output(self, p, k):
@@ -83,15 +83,15 @@ class AESAttack:
         """ This function calculates |S_i - S_j| i=[0:n_s], j=[i+1:n_s] for a single trace,
             where n is the number of samples and returns a [n_s * (n_s - 1)/2]_vector """
         n = len(trace)  # self.n_s = n_samples = self.trs.number_of_samples
-        product_sam = np.zeros(self.n_s_c_p)
+        diff_sam = np.zeros(self.n_s_c_p)
         i = 0
         for j in range(n):
             for k in range(j + 1, n):
-                product_sam[i] = abs(trace[j] - trace[k])
+                diff_sam[i] = abs(trace[j] - trace[k])
                 i += 1
-        return product_sam
+        return diff_sam
 
-    def cent_prod_combining_trace(self, trace, mean_sam):
+    def diff_combining_trace(self, trace, mean_sam):
         """ This function returns a trace that is centered and diff (n_s * (n_s - 1)/2_vector)"""
         centered_trace = self.centering_trace(trace, mean_sam)
         abs_diff_c_trace = self.diff_samples(centered_trace)  # (n_s * (n_s - 1)/2_vector)
@@ -102,9 +102,9 @@ class AESAttack:
             which are used as new traces in dpa attack"""
         traces = self.traces()
         mean_sam = self.mean_sample()
-        combined_traces = np.zeros((self.n_t, self.n_s_c_p))  # Array of centered_product_samples of each trace
+        combined_traces = np.zeros((self.n_t, self.n_s_c_p))  # Array of centered_diff_samples of each trace
         for i in range(self.n_t):
-            combined_traces[i] = self.cent_prod_combining_trace(traces[i], mean_sam)
+            combined_traces[i] = self.diff_combining_trace(traces[i], mean_sam)
         return combined_traces
 
     def leakage_traces(self):
