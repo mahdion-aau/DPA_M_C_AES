@@ -7,9 +7,9 @@ Traces are measured by GILES[2] with Hamming weight model as leakage generation 
 All traces are saved in a set file so_called TRS[3] as output of GILES.
 With the ability of GILES, in particular elmo-funcs.h, the target(S_box) is specified by start/pause trigger, random plaintexts are added to traces.
 
-The attack is based Hamming Weight as prediction function and Pearson's Correlation is used for extracting the key.
+The second_order DPA attacks are based on Hamming Weight as prediction function and Pearson's Correlation is used for extracting the key.
 
-The combination function is the Centered_Product function[4]. 
+The combination functions are the Centered_Product function and Centered_Absolute_Difference[4]. Also they are compared with each other. 
  
 
 
