@@ -49,7 +49,7 @@ class AESAttack:
         for i in range(self.n_t):
             # Extracting plaintext from TRS file
             [pt_ind, ct_ind] = self.trs.get_trace_data(i)
-            pt[i] = pt_ind[0]  # Extracting the first byte of plaintext
+            pt[i] = pt_ind[0] # Extracting the first byte of plaintext
             for k_guess in range(256):
                 sb_out = self.s_box_output(pt[i, 0], k_guess)
                 hw_vec_guess[i, 0, k_guess] = self.hw(sb_out)
@@ -79,32 +79,39 @@ class AESAttack:
             centered_trace[i] = trace[i] - mean_sam[i]
         return centered_trace
 
-    def diff_samples(self, trace):
-        """ This function calculates |S_i - S_j| i=[0:n_s], j=[i+1:n_s] for a single trace,
-            where n is the number of samples and returns a [n_s * (n_s - 1)/2]_vector """
+    def combined_samples(self, trace, combining_func):
+        """ This function calculates one of the combining functions
+         centred_product (S_i * S_j) i=[0:n_s], j=[i+1:n_s]
+         or or absolute_difference |S_i - S_j| i=[0:n_s], j=[i+1:n_s]
+         for a single trace, where n is the number of samples and returns a [n_s * (n_s - 1)/2]_vector """
         n = len(trace)  # self.n_s = n_samples = self.trs.number_of_samples
-        product_sam = np.zeros(self.n_s_c_p)
+        comb_sam = np.zeros(self.n_s_c_p)
         i = 0
         for j in range(n):
-            for k in range(j + 1, n):
-                product_sam[i] = abs(trace[j] - trace[k])
+            for k in range(j+1, n):
+                if combining_func == prod:
+                    comb_sam[i] = trace[j] * trace[k]
+                elif combining_func == diff:
+                    comb_sam[i] = abs(trace[j] - trace[k])
+                else:
+                    print('Incorrect combining function')
                 i += 1
-        return product_sam
+        return comb_sam
 
-    def cent_prod_combining_trace(self, trace, mean_sam):
-        """ This function returns a trace that is centered and diff (n_s * (n_s - 1)/2_vector)"""
+    def combining_trace(self, trace, mean_sam):
+        """ This function returns a trace that is centered and product (n_s * (n_s - 1)/2_vector)"""
         centered_trace = self.centering_trace(trace, mean_sam)
-        abs_diff_c_trace = self.diff_samples(centered_trace)  # (n_s * (n_s - 1)/2_vector)
-        return abs_diff_c_trace
+        combined_c_trace = self.combined_samples(centered_trace)  # (n_s * (n_s - 1)/2_vector)
+        return combined_c_trace
 
     def comb_traces(self):
-        """ This function returns all traces from centred absolute_difference combining function
+        """ This function returns all traces from centred product combining function
             which are used as new traces in dpa attack"""
         traces = self.traces()
         mean_sam = self.mean_sample()
         combined_traces = np.zeros((self.n_t, self.n_s_c_p))  # Array of centered_product_samples of each trace
         for i in range(self.n_t):
-            combined_traces[i] = self.cent_prod_combining_trace(traces[i], mean_sam)
+            combined_traces[i] = self.combining_trace(traces[i], mean_sam)
         return combined_traces
 
     def leakage_traces(self):
@@ -116,10 +123,8 @@ class AESAttack:
     def pearson_corr(self, hw_ve, leak_trc):
         """ When an input of pearsonr is constant, the output of pearsonr is Nan,
          so there is a warning for solving this warning pearson_check function is defined"""
-
         def all_same(in_array):
             return all(x == in_array[0] for x in in_array)
-
         if all_same(hw_ve) ^ all_same(leak_trc):
             corr_pea = 0
         else:
@@ -157,7 +162,7 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('2sh_5b_400.trs')
+    aes_attack.read_trs('2sh_fc_400.trs')
     # mean_samp = aes_attack.mean_sample()
 
     hw_v = aes_attack.hw_model_all_p_key()

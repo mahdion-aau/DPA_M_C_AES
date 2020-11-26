@@ -41,18 +41,18 @@ class AESAttack:
         y = bin(x).count("1")
         return y
 
-    def hw_model_all_p_key(self):
+    def hw_model_all_p_key(self, p_len):
         """ This function computes HW of the S_BOX output for all bytes of key (256) and n 16_byte plaintexts"""
-        """ --> hw_vec_guess(n, 16,256)"""
-        hw_vec_guess = np.zeros((self.n_t, int(self.len_p / 2), 256)).astype(int)  # Array of hw_vec
+        """ --> hw_vec_guess(n, 1,256)"""
+        hw_vec_guess = np.zeros((self.n_t, int(self.len_p / 2), 256)).astype(int) # Array of hw_vec
         pt = np.zeros((self.n_t, int(self.len_p / 2)), np.dtype('B'))  # Array of plaintexts
         for i in range(self.n_t):
             # Extracting plaintext from TRS file
             [pt_ind, ct_ind] = self.trs.get_trace_data(i)
-            pt[i] = pt_ind[0]  # Extracting the first byte of plaintext
+            pt[i] = pt_ind # Extracting the first byte of plaintext
             for k_guess in range(256):
-                sb_out = self.s_box_output(pt[i, 0], k_guess)
-                hw_vec_guess[i, 0, k_guess] = self.hw(sb_out)
+                sb_out = self.s_box_output(pt[i, p_len], k_guess)
+                hw_vec_guess[i, p_len, k_guess] = self.hw(sb_out)
         return hw_vec_guess
 
     def traces(self):
@@ -79,26 +79,26 @@ class AESAttack:
             centered_trace[i] = trace[i] - mean_sam[i]
         return centered_trace
 
-    def diff_samples(self, trace):
-        """ This function calculates |S_i - S_j| i=[0:n_s], j=[i+1:n_s] for a single trace,
+    def product_samples(self, trace):
+        """ This function calculates (S_i * S_j) i=[0:n_s], j=[i+1:n_s] for a single trace,
             where n is the number of samples and returns a [n_s * (n_s - 1)/2]_vector """
         n = len(trace)  # self.n_s = n_samples = self.trs.number_of_samples
         product_sam = np.zeros(self.n_s_c_p)
         i = 0
         for j in range(n):
-            for k in range(j + 1, n):
-                product_sam[i] = abs(trace[j] - trace[k])
+            for k in range(j+1, n):
+                product_sam[i] = trace[j] * trace[k]
                 i += 1
         return product_sam
 
     def cent_prod_combining_trace(self, trace, mean_sam):
-        """ This function returns a trace that is centered and diff (n_s * (n_s - 1)/2_vector)"""
+        """ This function returns a trace that is centered and product (n_s * (n_s - 1)/2_vector)"""
         centered_trace = self.centering_trace(trace, mean_sam)
-        abs_diff_c_trace = self.diff_samples(centered_trace)  # (n_s * (n_s - 1)/2_vector)
-        return abs_diff_c_trace
+        cent_prod_c_trace = self.product_samples(centered_trace)  # (n_s * (n_s - 1)/2_vector)
+        return cent_prod_c_trace
 
     def comb_traces(self):
-        """ This function returns all traces from centred absolute_difference combining function
+        """ This function returns all traces from centred product combining function
             which are used as new traces in dpa attack"""
         traces = self.traces()
         mean_sam = self.mean_sample()
@@ -116,10 +116,8 @@ class AESAttack:
     def pearson_corr(self, hw_ve, leak_trc):
         """ When an input of pearsonr is constant, the output of pearsonr is Nan,
          so there is a warning for solving this warning pearson_check function is defined"""
-
         def all_same(in_array):
             return all(x == in_array[0] for x in in_array)
-
         if all_same(hw_ve) ^ all_same(leak_trc):
             corr_pea = 0
         else:
@@ -135,31 +133,49 @@ class AESAttack:
                 max_corr = abs(corr[i])
         return [max_corr, corr]
 
-    def attack_dpa(self, hw_ve, leak_traces):
+    def attack_dpa(self, hw_ve, ax, leak_traces, i_p_len):
+        """ This function recovers (the p_len)_th byte of the key"""
+        ax.clear()
         max_corr = 0
         max_corr_k = 0
-        correct_key = 0
         corr = np.zeros((256, self.n_s_c_p))
-        self.trs.plot_initial()
+        correct_key = 0
         for k_g in range(256):
-            [max_corr, corr[k_g]] = self.compute_corr(hw_ve[:, 0, k_g], leak_traces)
+            [max_corr, corr[k_g]] = self.compute_corr(hw_ve[:, i_p_len, k_g], leak_traces)
             if max_corr > max_corr_k:
                 max_corr_k = max_corr
                 correct_key = k_g
-            self.trs.plot_trace_input(corr[k_g])
-        self.trs.phrase_plot(correct_key)
-        self.trs.plot_show('Samples', 'Correlation', 'Corr(HW, traces)', 'corr')
-        print('The first byte of the key is:', hex(correct_key))
-        print('Max Corr is:', max_corr_k)
-
+            ax.plot(corr[k_g])
+        ax.set_xlim([1, len(corr[0])])
+        # ax.set_ylim([-1, 1])
+        ax.title.set_text('Byte {0}=0x{1:2x}'.format(i_p_len, correct_key))
+        ax.set_xlabel('Samples')
+        ax.set_ylabel('Correlation')
+        print('Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key))
+        print('Maximum correlation is: {} '.format(max_corr_k))
+        print('__________________________________________')
         return [max_corr, hex(correct_key), corr]
 
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('2sh_5b_400.trs')
-    # mean_samp = aes_attack.mean_sample()
+    aes_attack.read_trs('2sh_16b_400.trs')
+    p_len = aes_attack.n_s_c_p
+    plt.ion()
+    fig = plt.figure()
+    i_ax = []
+    for i in range(p_len):
+        i_ax.append(fig.add_subplot(4, 4, i + 1))
 
-    hw_v = aes_attack.hw_model_all_p_key()
-    leakage_traces = aes_attack.leakage_traces()
-    attack = aes_attack.attack_dpa(hw_v, leakage_traces)
+        hw_v = aes_attack.hw_model_all_p_key(i)
+        leakage_traces = aes_attack.leakage_traces()
+        attack = aes_attack.attack_dpa(hw_v, i_ax[i], leakage_traces, i)
+
+        fig.canvas.draw()
+        fig.canvas.flush_events()
+        plt.show()
+        plt.tight_layout()
+        plt.pause(.001)
+
+    plt.ioff()
+    plt.show()
