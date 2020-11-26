@@ -79,14 +79,6 @@ class AESAttack:
             centered_trace[i] = trace[i] - mean_sam[i]
         return centered_trace
 
-    # def centering_all_traces(self):
-    #     """ This function centers to zero all samples in all trace """
-    #     all_traces = self.traces()
-    #     all_centred_trace = np.zeros((self.n_t, self.n_s))
-    #     for i in range(self.n_t):
-    #         all_centred_trace[i] = self.centering_trace(all_traces[i], mean_sam)
-    #     return all_centred_trace
-
     def product_samples(self, trace):
         """ This function calculates (S_i * S_j) i=[0:n_s], j=[i+1:n_s] for a single trace,
             where n is the number of samples and returns a [n_s * (n_s - 1)/2]_vector """
@@ -163,7 +155,7 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('2sh_fc_400.trs')
+    aes_attack.read_trs('2sh_5b_400.trs')
     # mean_samp = aes_attack.mean_sample()
 
     hw_v = aes_attack.hw_model_all_p_key()
