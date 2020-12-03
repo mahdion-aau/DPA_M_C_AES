@@ -79,37 +79,45 @@ class AESAttack:
             centered_trace[i] = trace[i] - mean_sam[i]
         return centered_trace
 
-    def product_samples(self, trace):
-        """ This function calculates (S_i * S_j) i=[0:n_s], j=[i+1:n_s] for a single trace,
-            where n is the number of samples and returns a [n_s * (n_s - 1)/2]_vector """
+
+    def combined_samples(self, trace, combining_func):
+        """ This function calculates one of the combining functions
+         centred_product (S_i * S_j) i=[0:n_s], j=[i+1:n_s]
+         or or absolute_difference |S_i - S_j| i=[0:n_s], j=[i+1:n_s]
+         for a single trace, where n is the number of samples and returns a [n_s * (n_s - 1)/2]_vector """
         n = len(trace)  # self.n_s = n_samples = self.trs.number_of_samples
-        product_sam = np.zeros(self.n_s_c_p)
+        comb_sam = np.zeros(self.n_s_c_p)
         i = 0
         for j in range(n):
             for k in range(j+1, n):
-                product_sam[i] = trace[j] * trace[k]
+                if combining_func == 'prod':
+                    comb_sam[i] = trace[j] * trace[k]
+                elif combining_func == 'diff':
+                    comb_sam[i] = abs(trace[j] - trace[k])
+                else:
+                    print('Incorrect combining function')
                 i += 1
-        return product_sam
+        return comb_sam
 
-    def cent_prod_combining_trace(self, trace, mean_sam):
+    def combining_trace(self, trace, mean_sam, combining_func):
         """ This function returns a trace that is centered and product (n_s * (n_s - 1)/2_vector)"""
         centered_trace = self.centering_trace(trace, mean_sam)
-        cent_prod_c_trace = self.product_samples(centered_trace)  # (n_s * (n_s - 1)/2_vector)
-        return cent_prod_c_trace
+        combined_c_trace = self.combined_samples(centered_trace, combining_func)  # (n_s * (n_s - 1)/2_vector)
+        return combined_c_trace
 
-    def comb_traces(self):
+    def comb_traces(self, combining_func):
         """ This function returns all traces from centred product combining function
             which are used as new traces in dpa attack"""
         traces = self.traces()
         mean_sam = self.mean_sample()
         combined_traces = np.zeros((self.n_t, self.n_s_c_p))  # Array of centered_product_samples of each trace
         for i in range(self.n_t):
-            combined_traces[i] = self.cent_prod_combining_trace(traces[i], mean_sam)
+            combined_traces[i] = self.combining_trace(traces[i], mean_sam, combining_func)
         return combined_traces
 
-    def leakage_traces(self):
+    def leakage_traces(self, combining_func):
         """ This function returns transparent traces that is used in corr(hw_vector,leakage_traces)"""
-        traces = self.comb_traces()
+        traces = self.comb_traces(combining_func)
         trans_traces = traces.transpose()
         return trans_traces
 
@@ -133,9 +141,8 @@ class AESAttack:
                 max_corr = abs(corr[i])
         return [max_corr, corr]
 
-    def attack_dpa(self, hw_ve, ax, leak_traces, i_p_len):
+    def attack_dpa(self, hw_ve, leak_traces, i_p_len):
         """ This function recovers (the p_len)_th byte of the key"""
-        ax.clear()
         max_corr = 0
         max_corr_k = 0
         corr = np.zeros((256, self.n_s_c_p))
@@ -145,12 +152,6 @@ class AESAttack:
             if max_corr > max_corr_k:
                 max_corr_k = max_corr
                 correct_key = k_g
-            ax.plot(corr[k_g])
-        ax.set_xlim([1, len(corr[0])])
-        # ax.set_ylim([-1, 1])
-        ax.title.set_text('Byte {0}=0x{1:2x}'.format(i_p_len, correct_key))
-        ax.set_xlabel('Samples')
-        ax.set_ylabel('Correlation')
         print('Byte {0} = 0x{1:2x}'.format(i_p_len, correct_key))
         print('Maximum correlation is: {} '.format(max_corr_k))
         print('__________________________________________')
@@ -161,21 +162,23 @@ if __name__ == "__main__":
     aes_attack = AESAttack()
     aes_attack.read_trs('2sh_16b_400.trs')
     p_len = aes_attack.n_s_c_p
-    plt.ion()
-    fig = plt.figure()
-    i_ax = []
+    leakage_traces = aes_attack.leakage_traces('prod')
+
     for i in range(p_len):
-        i_ax.append(fig.add_subplot(4, 4, i + 1))
-
         hw_v = aes_attack.hw_model_all_p_key(i)
-        leakage_traces = aes_attack.leakage_traces()
-        attack = aes_attack.attack_dpa(hw_v, i_ax[i], leakage_traces, i)
+        attack = aes_attack.attack_dpa(hw_v, leakage_traces, i)
+        max_cor.append(attack[0])
+        print('Max correlation is: {}'.format(attack[0]))
+        print('__________________________________________')
+        # print('Pearson(prod/diff) is: {}'.format(max_cor[0]/max_cor[1]))
+        # print('Max_corr(prod-diff) is: {}'.format(max_cor[0] - max_cor[1]))
 
-        fig.canvas.draw()
-        fig.canvas.flush_events()
-        plt.show()
-        plt.tight_layout()
-        plt.pause(.001)
-
-    plt.ioff()
-    plt.show()
+    # for i in (['prod', 'diff']):
+    #     print('combining_Func is: {}'.format(i))
+    #     leakage_traces = aes_attack.leakage_traces(i)
+    #     attack = aes_attack.attack_dpa(hw_v, leakage_traces)
+    #     max_cor.append(attack[0])
+    #     print('Max correlation is: {}'.format(attack[0]))
+    #     print('__________________________________________')
+    # print('Pearson(prod/diff) is: {}'.format(max_cor[0]/max_cor[1]))
+    # print('Max_corr(prod-diff) is: {}'.format(max_cor[0] - max_cor[1]))
