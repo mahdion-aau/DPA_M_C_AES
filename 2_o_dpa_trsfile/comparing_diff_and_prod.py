@@ -162,15 +162,16 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('2sh_fc_300.trs')
+    aes_attack.read_trs('2sh_fc_400.trs')
     # mean_samp = aes_attack.mean_sample()
     hw_v = aes_attack.hw_model_all_p_key()
     max_cor = []
     for i in (['prod', 'diff']):
+        print('combining_Func is: {}'.format(i))
         leakage_traces = aes_attack.leakage_traces(i)
         attack = aes_attack.attack_dpa(hw_v, leakage_traces)
         max_cor.append(attack[0])
-        print('In {} combining_Func Max correlation is: {}'.format(i, attack[0]))
+        print('Max correlation is: {}'.format(attack[0]))
         print('__________________________________________')
-    print('prod/diff is: {}'.format(max_cor[0]/max_cor[1]))
-    print('prod-diff is: {}'.format(max_cor[0] - max_cor[1]))
+    print('Pearson(prod/diff) is: {}'.format(max_cor[0]/max_cor[1]))
+    print('Max_corr(prod-diff) is: {}'.format(max_cor[0] - max_cor[1]))

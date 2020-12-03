@@ -157,7 +157,7 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('2sh_5b_400.trs')
+    aes_attack.read_trs('2sh_1a_200.trs')
     # mean_samp = aes_attack.mean_sample()
 
     hw_v = aes_attack.hw_model_all_p_key()
