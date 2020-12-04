@@ -1,0 +1,144 @@
+# Updated 2020/12/03.
+
+A quick guide for using the pytrs module.
+
+(I) Introduction
+This module provides a set of interfaces for Riscure TRS file format (*.trs). TRS files are used by Riscure Inspector to store trace data.
+
+pytrs is designed under an Object-Oriented (OO) principle. There are two major classes in the pytrs module:
+(1) class TraceSet()
+A TraceSet() object is an abstract of a trs file which constitutes the header data and the trace data. The header data are stored in the member variable TraceSet.header and the trace data are stored in the member variable TraceSet.traces.
+
+(2) class Trace()
+A Trace() object represents a trace including its corresponding user defined input/output (Trace.udata) and the measurements over all time points (Trace.points).
+
+An overview of the classes:
+TraceSet():
+    |-- headers # Type dict(). Header data of the trs file.
+    `-- traces # Type Traces()[]. An array of all traces.
+        |-- udata # Type byte(). User defined data of this trace that normally corresponding to plaintext and ciphertext.
+        `-- points # Type numpy.ndarray(). Measurements at each time point of this trace.
+
+
+(II) Dependency:
+For a standard Python3 installation, you can install the dependent packages by running the following command:
+$ pip3 install numpy scipy tqdm
+
+
+(III) Import traces:
+The following guide assumes you have placed pytrs into the current folder and the trs file is located at "/tmp/test.trs". You should change the file paths as you need before use. The pytrs can be used in either an interactive python3 console (i.e. by executing python3 in the command line) or be imported into your own python3 script. This guild shows the usage in an interactive mode and you can always tranlate them into your script.
+
+The obvious very first step is to import the pytrs module:
+------------------
+>>> import pytrs
+------------------
+
+To use pytrs, the very first step is always to instantiate a TraceSet from either a trs file or a Pytrs Quick Cache (pqc) file which will be explained later. 
+
+To instantiate from a trs file as the object TS:
+------------------
+>>> TS = pytrs.TraceSet("/tmp/test.trs")
+100%|█████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4513.05it/s]
+------------------
+
+Large trs files may take a long time to load. Therefore pytrs provides a set of APIs to efficiently store and load traces in the pqc format. To store the above TraceSet object (TS) into "/tmp/test.pqc":
+------------------
+>>> fp = open("/tmp/test.pqc", "wb")
+>>> TS.Dump(fp)
+------------------
+
+Then in the future you can skip the trs file and directly do:
+------------------
+>>> fp = open("/tmp/test.pqc", "rb")
+>>> TS = pytrs.LoadTraceSet(fp)
+------------------
+which should be much faster than from a trs file.
+
+
+(IV) Extract all traces.
+The array of traces can be obtained by the TraceSet.GetTrace() API:
+------------------
+>>>traces = TS.GetTraces()
+------------------
+
+Then, for instance, the following shows the user data (as bytes) and trace values of the first trace:
+------------------
+>>> traces[0].udata
+b'\xcf!f/\x08\xf2n\xd5{a\x0c:\xb8\xb7\x8fI\x98V\x92\x9c?C\xd5p\x9f9\xe5X+i-\xf3'
+>>> traces[0].points
+array([ -3079,  -3335,  -6671,  -8211,  -8980,  -9750,  -8980,  -8211,
+        -6928,  -4362,  -5131,  -4875,  -4362,  -3848,  -1796,  -8980,
+        ... VALUES IGNORED ...])
+------------------
+
+
+(V) Extract only user data.
+You can also extract only the user data by:
+------------------
+>>> data = TS.GetData()
+------------------
+
+Then you can access the user data of i-th trace (e.g. i = 0) by:
+------------------
+>>> data[0]
+b'\xcf!f/\x08\xf2n\xd5{a\x0c:\xb8\xb7\x8fI\x98V\x92\x9c?C\xd5p\x9f9\xe5X+i-\xf3'
+------------------
+
+
+(VI) Extract only trace measurements.
+Similarly, you can extract all trace measurements into a numpy matrix by:
+------------------
+>>> tracevalues = TS.GetAllPoints()
+>>> tracevalues
+matrix([[-3079, -3335, -6671, ...,  1796,  -513,  -769],
+        [-2052, -2822, -5645, ...,  2309,     0,  -769],
+        [-1539, -3335, -4105, ...,  1796,     0, -1539],
+        ...,
+        [-3079, -3592, -6671, ...,   769, -1026, -1539],
+        [-2565, -3335, -6671, ...,  1282,  -513, -1282],
+        [-2822, -3848, -6671, ...,  1282,  -513, -1026]])
+------------------
+
+The i-th row of the matrix corresponds to the values of i-th trace over each time point and j-th column corresponds to the values of all traces at the time point j.
+
+
+(VII) Export to Matlab
+It is also possible to export the trace data into a Matlab mat file:
+------------------
+>>> TS.DumpToMat("/tmp/test.mat", "udata", "traceval")
+------------------
+
+The above will generate the Matlab file "/tmp/test.mat" containing the matrix of bytes of user data "udata" and the matrix of trace measurements "traceval" where row of them corresponds to a single trace. For "udata", the columns represent the byte index of the user data. For "traceval", the columns represent the time points.
+
+
+(VIII) Paralisation of repeated experiments.
+The TraceSet.MpRun() API provides a simplified paralisation mechanism for repeated experiments. It returns a list of results of the experiments.
+
+For example, suppose you have written a attack function Attck() which takes a TraceSet object as input and returns the key. Now you want to evaluate its success rate on the real/simulated trs file "/tmp/test.trs". The following code shows how to parallelise it with MpRun:
+
+------------------
+import pytrs
+
+# Write a wrapper function to unwrap the parallel arguments.
+def AttackWrapper(*args):
+    traceset = args[0] # The first in the args list will always be the trace set.
+    truekey = args[1] # The second (if exist) is what you passed to MpRun() as the args arguement.
+    if truekey == Attack(traceset): # Run your Attack() script to recover the key.
+        return True # Successfully recovered the true key.
+    else
+        return False # Failed attack.
+
+# From here is the main function.
+ts = pytrs.TraceSet("/tmp/test.trs") # Load the script.
+results = ts.MpRun(
+    ParaFunc = AttackWrapper, # Your wrapper function.
+    ntrace = 1000, # Feed 1000 traces from to each experiment.
+    ntrial = 200, # Run 100 experiments. (OPTIONAL: Default=100)
+    args = (0x15, 0x51), # Arguments passed to AttackWrapper. Here we suppose (0x15, 0x51) are the true keys. (OPTINAL)
+    nthread = 4, # Number of processes to use. (OPTINAL: Default = number of cores.)
+    verbose = True # Show progress bar. 
+    )
+
+# Now you can derive your success rate from the results.
+successrate = results.count(True) / len(results)
+------------------
