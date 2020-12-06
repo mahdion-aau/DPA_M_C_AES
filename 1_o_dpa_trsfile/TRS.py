@@ -1,4 +1,5 @@
 ############## Reading TRS file, Showing Data, Plotting Traces
+# Written by Nima Mahdion
 import trsfile
 import numpy as np
 import matplotlib.pyplot as plt
@@ -25,16 +26,16 @@ class TRS:
             return self.traces[ind].samples
 
     def get_trace_data(self, ind):  # Gives the data of the index_th trace
-        p_ind = np.zeros((1, int(self.cryptolen / 2)), np.dtype('B'))  # plaintext
-        c_ind = np.zeros((1, int(self.cryptolen / 2)), np.dtype('B'))  # ciphertext
+        p_ind = np.zeros(( int(self.cryptolen / 2)), np.dtype('B'))  # plaintext
+        c_ind = np.zeros(( int(self.cryptolen / 2)), np.dtype('B'))  # ciphertext
         d_ind = self.traces[ind].data
         half_cryptolen = int(self.cryptolen/2)
         if ind < self.number_of_traces:  # Check the correctness of the number_of_traces
             for i in range(0, self.cryptolen):
                 if i < half_cryptolen:
-                    p_ind[0][i] = d_ind[i]
+                    p_ind[i] = d_ind[i]
                 else:
-                    c_ind[0][i-half_cryptolen] = d_ind[i]
+                    c_ind[i-half_cryptolen] = d_ind[i]
         return [p_ind, c_ind]
     
     def x_axis(self, r1, r2):

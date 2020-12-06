@@ -4,7 +4,7 @@
 "Second_order DPA attack on masked_combined AES"
 
 
-TRS.py module uses trsfile (a library published by Riscure[1]) for extracting traces, data and ... from trs files.
+TRS.py module uses trsfile (a library published by Riscure[1]) for extracting traces, data and ... from trs files.(Written by Nima Mahdion)
 
 attack_absolute_difference.py extracts the first byte of the key by making use of centered_absolute_difference combining function.Could be tested with 2sh_5b_400 and 2sh_fc_400.trs (Name of files: Number of shares+the first byte of the key+ Number of traces+.trs).
 

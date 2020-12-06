@@ -1,4 +1,5 @@
 ############## Reading TRS file, Showing Data, Plotting Traces
+# Written by Nima Mahdion
 import trsfile
 import numpy as np
 import matplotlib.pyplot as plt
