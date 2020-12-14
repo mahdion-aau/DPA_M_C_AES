@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../lib/libthumb-sim.a  CMakeFiles/libthumb-sim.dir/fetch.cpp.o CMakeFiles/libthumb-sim.dir/memory.cpp.o CMakeFiles/libthumb-sim.dir/processor.cpp.o CMakeFiles/libthumb-sim.dir/regfile.cpp.o CMakeFiles/libthumb-sim.dir/decode.cpp.o CMakeFiles/libthumb-sim.dir/execute.cpp.o CMakeFiles/libthumb-sim.dir/alu.cpp.o CMakeFiles/libthumb-sim.dir/lsu.cpp.o CMakeFiles/libthumb-sim.dir/branch.cpp.o CMakeFiles/libthumb-sim.dir/misc.cpp.o CMakeFiles/libthumb-sim.dir/stats.cpp.o CMakeFiles/libthumb-sim.dir/simulator.cpp.o
+/usr/bin/ranlib ../lib/libthumb-sim.a
