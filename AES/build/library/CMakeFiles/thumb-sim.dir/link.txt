@@ -1,1 +1,0 @@
-/usr/bin/c++   -Wall -Wextra -Wpedantic -Werror -fdiagnostics-color  -rdynamic CMakeFiles/thumb-sim.dir/main.cpp.o  -o ../bin/thumb-sim  ../lib/libthumb-sim.a 

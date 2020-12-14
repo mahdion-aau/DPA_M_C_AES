@@ -1,6 +1,0 @@
-/home/IWAS/mahpar/Documents/daily_work/027OCT/1r_1bS_1sh_0k_1/build/CMakeFiles/rebuild_cache.dir
-/home/IWAS/mahpar/Documents/daily_work/027OCT/1r_1bS_1sh_0k_1/build/CMakeFiles/edit_cache.dir
-/home/IWAS/mahpar/Documents/daily_work/027OCT/1r_1bS_1sh_0k_1/build/library/CMakeFiles/rebuild_cache.dir
-/home/IWAS/mahpar/Documents/daily_work/027OCT/1r_1bS_1sh_0k_1/build/library/CMakeFiles/edit_cache.dir
-/home/IWAS/mahpar/Documents/daily_work/027OCT/1r_1bS_1sh_0k_1/build/library/CMakeFiles/thumb-sim.dir
-/home/IWAS/mahpar/Documents/daily_work/027OCT/1r_1bS_1sh_0k_1/build/library/CMakeFiles/libthumb-sim.dir
