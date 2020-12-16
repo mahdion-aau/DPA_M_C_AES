@@ -5,7 +5,7 @@ This project is an example of using [GILES](https://github.com/sca-research/GILE
 
 Traces are measured by GILES with Hamming weight model as leakage generation model.
 All traces are saved in a set file so_called [trs file](https://www.riscure.com/security-tools/inspector-sca/) as output of GILES.
-With the ability of GILES, in particular elmo-funcs.h, the target(S_box) is specified by start/pause trigger instructions,and also the random plaintexts are added to traces by add_to_trace(plaintext,16) instruction.
+With the ability of GILES, in particular 'elmo-funcs.h', the target(S_box) is specified by start/pause trigger instructions,and also the random plaintexts are added to traces by add_to_trace(plaintext,16) instruction.
 
 The second_order DPA attacks are based on Hamming Weight as prediction function and Pearson's Correlation is used for extracting the key.
 
