@@ -1,5 +1,5 @@
 #include "rand.h"
-// This random nuber generator shifts the 32-bit LFSR
+// This random number generator shifts the 32-bit LFSR
 // twice before XORing it with the 31-bit LFSR.
 //the bottom 16 bits are used for the random number 
 uint volatile lfsr32, lfsr31, retrand;
