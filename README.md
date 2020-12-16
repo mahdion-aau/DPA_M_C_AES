@@ -1,7 +1,7 @@
 # DPA_M_C_AES
 DPA attack on masked_combined AES
 
-This project is related to performing the Differential Power Analyis (DPA) attack on Higher-Order-Masked-AES-128[1] (Masked_Combined_AES folder)which is implemented in C language.
+This project is related to performing the Differential Power Analyis (DPA) attack on Higher-Order-Masked-AES-128[1] (Masked_Combined_AES folder) which is implemented in C language.
 
 Traces are measured by GILES[2] with Hamming weight model as leakage generation model.
 All traces are saved in a set file so_called TRS[3] as output of GILES.
