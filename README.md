@@ -1,4 +1,4 @@
-# DPA_M_C_AES
+DPA_M_C_AES
 # DPA attack on masked_combined AES
 
 This project is an example of using [GILES] (https://github.com/sca-research/GILES) for performing the Differential Power Analyis (DPA) attack on Higher-Order-Masked-AES-128[2] (Masked_Combined_AES folder) which is implemented in C language.
