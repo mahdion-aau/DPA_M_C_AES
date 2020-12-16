@@ -15,7 +15,7 @@ The combination functions are the Centered_Product function and Centered_Absolut
 - [Description](#description)
 - [Installing GILES](#installing-GILES)
 - [Compiling the program](#Compiling-the-program)
-- [Ricording leakage traces](#recording-leakage-traces)
+- [Recording leakage traces](#recording-leakage-traces)
 - [Analysing recorded traces in python](#analysing-recorded-traces-in-python)
 - [First-order DPA attack](#first-order-dpa-attack)
 - [Second-order DPA attack](#second-order-dpa-attack)
