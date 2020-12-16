@@ -9,7 +9,7 @@ This project is an example of using [GILES](https://github.com/sca-research/GILE
 - [Description](#description)
 - [Installing GILES](#installing-GILES)
 - [Masked_Combined_AES](#masked-combined-AES)
-- [Compiling the program](#Compiling-the-program)
+- [Compiling the target program](#Compiling-the-target-program)
 - [Recording leakage traces](#recording-leakage-traces)
 - [Analysing recorded traces in python](#analysing-recorded-traces-in-python)
 - [First-order DPA attack](#first-order-dpa-attack)
@@ -20,6 +20,7 @@ This project is an example of using [GILES](https://github.com/sca-research/GILE
 
 ## Description
 
+In this project the first-order/second-order DPA attacks are carried out on the unmasked/masked and combined version of **AES Encryption** which is implemented in C.
 Traces are measured by [GILES](https://github.com/sca-research/GILES) with Hamming weight model as leakage generation model.
 All traces are saved in a set file so_called [trs file](https://www.riscure.com/security-tools/inspector-sca/) as output of [GILES](https://github.com/sca-research/GILES).
 With the ability of [GILES](https://github.com/sca-research/GILES), in particular `elmo-funcs.h`, the target (S_box) is specified by `start/pause trigger` instructions,and also the random plaintexts are added to traces by `add_to_trace(plaintext,16)` instruction.
@@ -32,7 +33,7 @@ The combination functions are the Centered_Product function and Centered_Absolut
 
 ## Masked_Combined_AES
 
-## Compiling the program
+## Compiling the target program
 
 ## Recording leakage traces
 
