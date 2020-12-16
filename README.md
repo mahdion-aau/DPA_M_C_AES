@@ -1,13 +1,14 @@
 DPA_M_C_AES
 # DPA attack on Masked_Combined AES
 
-This project is an example of using [GILES](https://github.com/sca-research/GILES) for performing the Differential Power Analyis (DPA) attack on [Higher-Order-Masked-AES-128](https://github.com/knarfrank/Higher-Order-Masked-AES-128) on **Ubuntu** .
+This project is an example of using [GILES](https://github.com/sca-research/GILES) for performing the Differential Power Analyis (DPA) attack on [Higher-Order-Masked-AES-128](https://github.com/knarfrank/Higher-Order-Masked-AES-128) on **Ubuntu**.
 
 
  <!-- toc -->
 
 - [Description](#description)
 - [Installing GILES](#installing-GILES)
+- [Masked_Combined_AES](#masked-combined-AES)
 - [Compiling the program](#Compiling-the-program)
 - [Recording leakage traces](#recording-leakage-traces)
 - [Analysing recorded traces in python](#analysing-recorded-traces-in-python)
@@ -28,6 +29,8 @@ The second_order DPA attacks are based on Hamming Weight as prediction function 
 The combination functions are the Centered_Product function and Centered_Absolute_Difference[1]. Also they are compared with each other. 
 
 ## Installing GILES
+
+## Masked_Combined_AES
 
 ## Compiling the program
 
