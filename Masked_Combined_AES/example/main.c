@@ -28,7 +28,7 @@ int main(void) {
     }
     add_to_trace(plaintext,16);
     Encrypt(ciphertext, plaintext, key);
-    add_to_trace(plaintext,16);    
+    add_to_trace(ciphertext,16);    
     
 }
 
