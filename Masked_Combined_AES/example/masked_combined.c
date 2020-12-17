@@ -108,7 +108,7 @@ void CombinedSbox(uint8_t s[16][NUM_SHARES]) {
     SecMultCombined(a, s, w, snd);
 
 start_trigger();
-    // This is change so we only get the first byte of the sbox
+    // This is changed, so we only get the first byte of the sbox
     // just change back to 16 if you want the whole state 
     //for(i = 0; i < 16; i++) {
     for(i = 0; i < 1; i++)  {
