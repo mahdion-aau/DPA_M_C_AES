@@ -2,7 +2,6 @@
  * AES-128 Encryption in EBC Mode - Main File
  */
 #include "stdint.h"
-//#include "stdio.h" //printf
 #include "masked_combined.h"
 #include "rand.h"
 
@@ -25,9 +24,12 @@ int main(void) {
     for(int i=0; i < 16; i++){
         plaintext[i]= getRand();
     }
-    add_to_trace(plaintext,16);  // Adding Plaintext to trs file
-    Encrypt(ciphertext, plaintext, key);
-    add_to_trace(ciphertext,16);    // Adding Ciphertext to trs file
     
+    
+    add_to_trace(plaintext,16);  // Adding Plaintext to trs file
+    
+    Encrypt(ciphertext, plaintext, key);
+    
+    add_to_trace(ciphertext,16);    // Adding Ciphertext to trs file   
 }
 
