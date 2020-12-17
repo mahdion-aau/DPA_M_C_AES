@@ -73,10 +73,6 @@ void MaskArray(uint8_t y[][NUM_SHARES], uint8_t x[], uint8_t length) {
         y[i][0] = x[i];
         for(j = 1; j < NUM_SHARES; j++) {
             y[i][j] = getRand();
-            //printf("  \n --------------share \n");
-            //printf("%02x", y[i][j]);
-
-
             y[i][0] = y[i][0] ^ y[i][j];
         }
     }
@@ -120,14 +116,10 @@ start_trigger();
             // We have merged the affine lookup table with the last linear
             // squaring in the extended addition chain.
             s[i][j] = l_affine_snd[a[i][j]];
-                    //printf("\n  output of S_box : %02x\n ", s[i][j]);
-
         }
         if((NUM_SHARES & 1) == 0) {
             s[i][0] ^= 0x63;
-            // printf("\n  oddsi0 : %02x", s[i][j]);
         }
-        // printf("\n  sij2 : %02x \n", s[i][j]);
     }
 pause_trigger();
 }
@@ -234,8 +226,6 @@ void SecEvalCombined(uint8_t w[16][NUM_SHARES], uint8_t z[16][NUM_SHARES], const
 
             // When NUM_SHARES is odd
               if ((NUM_SHARES & 1)==1){
-                  
-                //z[j][(NUM_SHARES/2)]=z[j][NUM_SHARES-1];//w[j][NUM_SHARES-1] = h[z[j][NUM_SHARES-1]];   
                 w[j][NUM_SHARES-1]=h[z[j][NUM_SHARES-1]];
                 }
     }
@@ -254,9 +244,6 @@ void SecEvalCombined(uint8_t w[16][NUM_SHARES], uint8_t z[16][NUM_SHARES], const
                 for(k = 1; k < 16; k++) {
                     w[k][i] ^= t0;
                     w[k][j] ^= t1;
-
-
-                    
                 }
             } else {
                 for(k = 1; k < 16; k++) {
@@ -329,17 +316,14 @@ void SecEvalTwoQuadraticRand(uint8_t y0[], uint8_t y1[], uint8_t aa0[], uint8_t 
         y0[(NUM_SHARES/2) + i] = h[a0[(NUM_SHARES/2) + i]];
         y1[i] = h[r];
         y1[(NUM_SHARES/2) + i] = h[a1[(NUM_SHARES/2) + i]];
-
-    
-
     }
             // When NUM_SHARES is odd
         if ((NUM_SHARES & 1)==1){
                     
             a0[NUM_SHARES-1]=aa0[NUM_SHARES-1];
             a1[NUM_SHARES-1]=aa1[NUM_SHARES-1];
-            y0[NUM_SHARES-1]=h[aa0[NUM_SHARES-1]];//         y0[NUM_SHARES-1] = h[a0[NUM_SHARES-1]];
-            y1[NUM_SHARES-1]=h[aa1[NUM_SHARES-1]];//         y1[NUM_SHARES-1] = h[a1[NUM_SHARES-1]]; 
+            y0[NUM_SHARES-1]=h[aa0[NUM_SHARES-1]];
+            y1[NUM_SHARES-1]=h[aa1[NUM_SHARES-1]]; 
             
         }
     for(i = 0; i < NUM_SHARES; i++) {
