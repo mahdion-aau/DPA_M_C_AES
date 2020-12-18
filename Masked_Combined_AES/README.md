@@ -1,15 +1,14 @@
 # Higher-Order-Masked-AES-128
 For ARM Cortex-M0
+[Higher-Order-Masked-AES-128](https://github.com/knarfrank/Higher-Order-Masked-AES-128)
 
-Implemention in C of the higher-order masking scheme proposed in [0] with CPRR method from [1]. 
+
+Implemention in C of the higher-order masking scheme proposed in [0] with CPRR method from [1].
 
 The AES implementation uses the Common Shares method [3], and the Random Reduction method [2] to increase the performance of the implementation.
+SecEvalCombined
 
-
-### SecEvalCombined
-The most interesting function is the 'SecEvalCombined' function which implements the Common Shares and Random Reduction from [2] and [3] respectively. 
-
-
+The most interesting function is the 'SecEvalCombined' function which implements the Common Shares and Random Reduction from [2] and [3] respectively.
 
 ### References
 
