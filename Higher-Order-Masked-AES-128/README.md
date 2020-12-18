@@ -1,4 +1,4 @@
-[Higher-Order-Masked-AES-128](https://github.com/knarfrank/Higher-Order-Masked-AES-128)
+# [Higher-Order-Masked-AES-128](https://github.com/knarfrank/Higher-Order-Masked-AES-128)
 
 
 Implemention in C of the higher-order masking scheme proposed in [0] with CPRR method from [1].
@@ -8,7 +8,8 @@ SecEvalCombined
 
 The most interesting function is the 'SecEvalCombined' function which implements the Common Shares and Random Reduction from [2] and [3] respectively.
 
-## References
+### References
+
 
 [0] "Provably Secure Higher Order Masking of AES"
 
