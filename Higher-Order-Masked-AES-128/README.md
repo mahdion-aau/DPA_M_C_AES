@@ -7,7 +7,8 @@ The AES implementation uses the Common Shares method [3], and the Random Reducti
 SecEvalCombined
 
 The most interesting function is the 'SecEvalCombined' function which implements the Common Shares and Random Reduction from [2] and [3] respectively.
-References
+
+## References
 
 [0] "Provably Secure Higher Order Masking of AES"
 
