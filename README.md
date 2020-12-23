@@ -21,11 +21,11 @@ current project are run on **Ubuntu**.
    
 - [Modified_Higher-Order-Masked-AES-128](#modified_higher-order-masked-aes-128)
 - [Masked_Combined AES for ARM Cortex-M0](#masked-combined-aes-for-arm-cortex-m0)
-- [Compiling the targeted program](#compiling-the-target-program)
+- [Compiling the targeted program](#compiling-the-targeted-program)
 - [Recording leakage traces](#recording-leakage-traces)
-- [Analysing recorded traces and data in a trs file](#analysing-recorded)
+- [Analysing recorded traces and data in a trs file](#analysing-recorded-traces-and-data-in-a-trs-file)
   * [Construction of a trs file](#Construction-of-a-trs-file)
-  * [Opening/Reading the content of a trs file](#Opening/Reading-of-a-trs-file)
+  * [Opening/Reading the content of a trs file](#Opening/Reading-the-content-of-a-trs-file)
 - [DPA attacks](#dpa-attacks)
     * [First-order DPA attack](#first-order-dpa-attack)
     * [Second-order DPA attack](#second-order-dpa-attack)
@@ -123,6 +123,18 @@ are printed:
 
 `$ GILES --help` or `$ GILES -h`
 
+
+### Input of GILES
+The input of [GILES](https://github.com/sca-research/GILES) is a
+"_**.bin**_" file. It means there is a need to compile the targeted
+program with a **Simulator** to generate the corresponding input 
+of [GILES](https://github.com/sca-research/GILES).
+For the current project,
+[Thumb Timing Simulator](https://github.com/bristol-sca/thumb-sim) 
+is considered as the **Simulator** which is the only Simulator 
+supported by [GILES](https://github.com/sca-research/GILES)
+at this time.
+
 ### Applicable features of GILES
 [GILES](https://github.com/sca-research/GILES) provides different
 features such as:
@@ -150,16 +162,6 @@ to select the target instruction/instructions and also
 `add_to_trace()` function for storing the favorable data and 
 other functions.
 
-### Input of GILES
-The input of [GILES](https://github.com/sca-research/GILES) is a
-"_**.bin**_" file. It means there is a need to compile the targeted
-program with a **Simulator** to generate the corresponding input 
-of [GILES](https://github.com/sca-research/GILES).
-For the current project,
-[Thumb Timing Simulator](https://github.com/bristol-sca/thumb-sim) 
-is considered as the **Simulator** which is the only Simulator 
-supported by [GILES](https://github.com/sca-research/GILES)
-at this time.
 
 
 
