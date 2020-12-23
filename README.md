@@ -23,8 +23,8 @@ current project are run on **Ubuntu**.
 - [Masked_Combined AES for ARM Cortex-M0](#masked-combined-aes-for-arm-cortex-m0)
 - [Compiling the targeted program](#compiling-the-target-program)
 - [Recording leakage traces](#recording-leakage-traces)
-- [Analysing recorded traces and data in **trs file**](#analysing-recorded)
-  * [Construction of **trs file**](#Construction of trs file)
+- [Analysing recorded traces and data in a **trs file**](#analysing-recorded)
+  * [Construction of a **trs file**](#Construction of trs file)
   * [Opening/Reading the content of a **trs file**](#Opening/Reading trs file)
 - [DPA attacks](#dpa-attacks)
     * [First-order DPA attack](#first-order-dpa-attack)
@@ -255,7 +255,7 @@ Now, for compiling and running the program, open a terminal and run
 file "_**a.out**_", and prints the Ciphertext 
  in the terminal.
 
-## Masked_Combined_AES for ARM cortex-M0
+## Masked_Combined AES for ARM Cortex-M0
 Here, the purpose is performing **DPA attacks**. 
 As a result, this is necessary to generate 
 **Random Plaintexts** and also determine the target
@@ -380,7 +380,7 @@ in the format
 4) There is no need to specify the leakage model, because the 
    default leakage model is [Hamming Weight](https://en.wikipedia.org/wiki/Hamming_Weight) 
 model.
-## Analysing recorded traces and data in _trs_ file
+## Analysing recorded traces and data in a _trs_ file
 The output of [GILES](https://github.com/sca-research/GILES)
 is a file with
    ["_**.trs**_"](https://trsfile.readthedocs.io/en/latest/), a 
@@ -389,7 +389,7 @@ which is a standard format defined by
    [Riscure's Inspector](https://www.riscure.com/security-tools/inspector-sca/).
 
 
-### Construction of _trs_ file
+### Construction of a _trs_ file
   A short brief from [here](https://trsfile.readthedocs.io/en/latest/api.html),
   a ["_**.trs**_"]((https://trsfile.readthedocs.io/en/latest/)
   ) file contains a Specific storage engine
@@ -431,7 +431,7 @@ includes some information such as:
                                            |
                                            |---> Number of traces 
 
-### Opening/Reading the content of _trs_ file
+### Opening/Reading the content of a _trs_ file
 To open and read a ["_**.trs**_"](https://trsfile.readthedocs.io/en/latest/) 
 file as well as extract the desired data from that,
 [Riscure's Inspector](https://www.riscure.com/security-tools/inspector-sca/)
