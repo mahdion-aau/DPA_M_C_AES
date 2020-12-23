@@ -20,7 +20,7 @@ current project are run on **Ubuntu**.
   * [Applicable features of GILES](#applicable-features-of-giles)
    
 - [Modified_Higher-Order-Masked-AES-128](#modified_higher-order-masked-aes-128)
-- [Masked_Combined AES for ARM Cortex-M0](#masked-combined-aes-for-arm-cortex-m0)
+- [Masked_Combined AES for ARM Cortex-M0](#masked_combined-aes-for-arm-cortex-m0)
 - [Compiling the targeted program](#compiling-the-targeted-program)
 - [Recording leakage traces](#recording-leakage-traces)
 - [Analysing recorded traces and data in a trs file](#analysing-recorded-traces-and-data-in-a-trs-file)
