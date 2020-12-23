@@ -29,6 +29,7 @@ current project are run on **Ubuntu**.
 - [DPA attacks](#dpa-attacks)
     * [First-order DPA attack](#first-order-dpa-attack)
     * [Second-order DPA attack](#second-order-dpa-attack)
+ - [References](#references)
 
 <!-- tocstop -->
 
@@ -406,29 +407,29 @@ includes some information such as:
  ["_**.trs**_"](https://trsfile.readthedocs.io/en/latest/):
 
 
-                                    **trs file**
+                                                       **trs file**
 
-        +-----------------------------------------------------------------------+
-        |                           Specific storage engine                     |
-        +-----------------------------------------------------------------------+
-                                            |
-                                            |
-                                            V
-            +--------------------+--------------------+--------------------+
-            |       Headers      |      Live_update   |    Padding_mode    |
-            +--------------------+--------------------+--------------------+
-                        |
-                        |
-                        V
-                +--------------+--------------+--------------+------
-                |    HEADER1   |    HEADER2   |    HEADER3   |   ...
-                +--------------+--------------+--------------+------
-                        |              |               |
-                        |              |               |---> Cryptographic information 
-                        |              |
-                        |              |---> Number of samples of each trace
-                        |
-                        |---> Number of traces 
+                           +-----------------------------------------------------------------------+
+                           |                           Specific storage engine                     |
+                           +-----------------------------------------------------------------------+
+                                                               |
+                                                               |
+                                                               V
+                               +--------------------+--------------------+--------------------+
+                               |       Headers      |      Live_update   |    Padding_mode    |
+                               +--------------------+--------------------+--------------------+
+                                           |
+                                           |
+                                           V
+                                   +--------------+--------------+--------------+------
+                                   |    HEADER1   |    HEADER2   |    HEADER3   |   ...
+                                   +--------------+--------------+--------------+------
+                                           |              |               |
+                                           |              |               |---> Cryptographic information 
+                                           |              |
+                                           |              |---> Number of samples of each trace
+                                           |
+                                           |---> Number of traces 
 
 ### Opening/Reading the content of _trs_ file
 To open and read a ["_**.trs**_"](https://trsfile.readthedocs.io/en/latest/) 
@@ -507,7 +508,7 @@ two combination functions **Centered_Product** and
 Also, there is a comparison between the results of these 
 two functions.
 
-## Acknowledgement
+## References
 
 [1] P.R.B: “Statistical analysis of second order differential power analysis,”IEEE Transactions on computers 2009"
 [2] "Faster Evaluation of SBoxes via Common Shares"
