@@ -163,7 +163,7 @@ at this time.
 
 
 
-## Higher-Order-Masked-AES-128
+## Modified_Higher-Order-Masked-AES-128
 
 The implementation of 
 [Higher-Order-Masked-AES-128](https://github.com/knarfrank/Higher-Order-Masked-AES-128) 
@@ -304,7 +304,7 @@ For checking the installed version use this command:
 
     `arm-none-eabi-gcc --version`
 
-## Compiling the target program
+## Compiling the targeted program
 
 As mentioned earlier, for compiling the targeted program
 ("_**Masked_Combined_AES**_") 
