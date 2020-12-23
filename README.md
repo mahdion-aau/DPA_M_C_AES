@@ -25,7 +25,7 @@ current project are run on **Ubuntu**.
 - [Recording leakage traces](#recording-leakage-traces)
 - [Analysing recorded traces and data in a trs file](#analysing-recorded-traces-and-data-in-a-trs-file)
   * [Construction of a trs file](#Construction-of-a-trs-file)
-  * [Opening/Reading the content of a trs file](#Opening/Reading-the-content-of-a-trs-file)
+  * [Opening/Reading the content of a trs file](#opening/reading-the-content-of-a-trs-file)
 - [DPA attacks](#dpa-attacks)
     * [First-order DPA attack](#first-order-dpa-attack)
     * [Second-order DPA attack](#second-order-dpa-attack)
