@@ -389,7 +389,7 @@ which is a standard format defined by
    [Riscure's Inspector](https://www.riscure.com/security-tools/inspector-sca/).
 
 
-### Construction of a _trs_ file
+### Construction of a trs file
   A short brief from [here](https://trsfile.readthedocs.io/en/latest/api.html),
   a ["_**.trs**_"]((https://trsfile.readthedocs.io/en/latest/)
   ) file contains a Specific storage engine
@@ -431,7 +431,7 @@ includes some information such as:
                                          |
                                          |---> Number of traces 
 
-### Opening/Reading the content of a _trs_ file
+### Opening/Reading the content of a trs file
 To open and read a ["_**.trs**_"](https://trsfile.readthedocs.io/en/latest/) 
 file as well as extract the desired data from that,
 [Riscure's Inspector](https://www.riscure.com/security-tools/inspector-sca/)
