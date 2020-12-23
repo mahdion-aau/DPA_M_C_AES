@@ -25,7 +25,7 @@ current project are run on **Ubuntu**.
 - [Recording leakage traces](#recording-leakage-traces)
 - [Analysing recorded traces and data in a trs file](#analysing-recorded-traces-and-data-in-a-trs-file)
   * [Construction of a trs file](#Construction-of-a-trs-file)
-  * [Opening/Reading the content of a trs file](#opening_reading-the-content-of-a-trs-file)
+  * [Reading the content of a trs file](#reading-the-content-of-a-trs-file)
 - [DPA attacks](#dpa-attacks)
     * [First-order DPA attack](#first-order-dpa-attack)
     * [Second-order DPA attack](#second-order-dpa-attack)
@@ -433,7 +433,7 @@ includes some information such as:
                                          |
                                          |---> Number of traces 
 
-### Opening/Reading the content of a trs file
+### Reading the content of a trs file
 To open and read a ["_**.trs**_"](https://trsfile.readthedocs.io/en/latest/) 
 file as well as extract the desired data from that,
 [Riscure's Inspector](https://www.riscure.com/security-tools/inspector-sca/)
