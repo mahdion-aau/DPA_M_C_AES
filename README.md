@@ -23,9 +23,9 @@ current project are run on **Ubuntu**.
 - [Masked_Combined AES for ARM Cortex-M0](#masked-combined-aes-for-arm-cortex-m0)
 - [Compiling the targeted program](#compiling-the-target-program)
 - [Recording leakage traces](#recording-leakage-traces)
-- [Analysing recorded traces and data in a **trs file**](#analysing-recorded)
-  * [Construction of a **trs file**](#Construction-of-a-trs-file)
-  * [Opening/Reading the content of a **trs file**](#Opening/Reading-of-a-trs-file)
+- [Analysing recorded traces and data in a trs file](#analysing-recorded)
+  * [Construction of a trs file](#Construction-of-a-trs-file)
+  * [Opening/Reading the content of a trs file](#Opening/Reading-of-a-trs-file)
 - [DPA attacks](#dpa-attacks)
     * [First-order DPA attack](#first-order-dpa-attack)
     * [Second-order DPA attack](#second-order-dpa-attack)
@@ -407,29 +407,29 @@ includes some information such as:
  ["_**.trs**_"](https://trsfile.readthedocs.io/en/latest/):
 
 
-                                                       **trs file**
+                                                     **trs file**
 
-                           +-----------------------------------------------------------------------+
-                           |                           Specific storage engine                     |
-                           +-----------------------------------------------------------------------+
-                                                               |
-                                                               |
-                                                               V
-                               +--------------------+--------------------+--------------------+
-                               |       Headers      |      Live_update   |    Padding_mode    |
-                               +--------------------+--------------------+--------------------+
-                                           |
-                                           |
-                                           V
-                                   +--------------+--------------+--------------+------
-                                   |    HEADER1   |    HEADER2   |    HEADER3   |   ...
-                                   +--------------+--------------+--------------+------
-                                           |              |               |
-                                           |              |               |---> Cryptographic information 
-                                           |              |
-                                           |              |---> Number of samples of each trace
-                                           |
-                                           |---> Number of traces 
+                         +-----------------------------------------------------------------------+
+                         |                           Specific storage engine                     |
+                         +-----------------------------------------------------------------------+
+                                                             |
+                                                             |
+                                                             V
+                             +--------------------+--------------------+--------------------+
+                             |       Headers      |      Live_update   |    Padding_mode    |
+                             +--------------------+--------------------+--------------------+
+                                         |
+                                         |
+                                         V
+                                 +--------------+--------------+--------------+------
+                                 |    HEADER1   |    HEADER2   |    HEADER3   |   ...
+                                 +--------------+--------------+--------------+------
+                                         |              |               |
+                                         |              |               |---> Cryptographic information 
+                                         |              |
+                                         |              |---> Number of samples of each trace
+                                         |
+                                         |---> Number of traces 
 
 ### Opening/Reading the content of a _trs_ file
 To open and read a ["_**.trs**_"](https://trsfile.readthedocs.io/en/latest/) 
