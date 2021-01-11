@@ -228,7 +228,7 @@ are modified as following:
    **RNG_based_LFSR**) the Makefile should be edited as follows:
    ```
    all
-        `gcc main.c masked_combined.c maths.c rand.c`
+        gcc main.c masked_combined.c maths.c rand.c
    ```
 **Note**: Modified_Higher-Order-Masked-AES-128
 is a _C_ program that can be run on **Ubuntu operating system**, 
