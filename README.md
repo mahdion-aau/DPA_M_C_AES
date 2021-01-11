@@ -304,7 +304,7 @@ like  **_C_ / _C++_ compiler GCC**. Here, the goal is
 
 For checking the installed version use this command: 
 
-    `arm-none-eabi-gcc --version`
+`$ arm-none-eabi-gcc --version`
 
 ## Compiling the targeted program
 
@@ -319,13 +319,13 @@ For compiling, some steps should be done as follows:
 1) Downloading
    [Thumb Timing Simulator](https://github.com/bristol-sca/thumb-sim):
    
-    `$ cd git clone https://github.com/sca-research/thumb-sim`
+   `$ cd git clone https://github.com/sca-research/thumb-sim`
 2) Copy/paste all the files in the "_**Masked_Combined_AES**_" 
    folder to "_**thumb-sim/example**_" folder.
    
 3) Editing the 27-th line of the existed "_**Makefile**_" in
    the "_**thumb-sim/example**_" folder as below:
-   `CSRCS     = main.c masked_combined.c maths.c rand.c`
+  `CSRCS     = main.c masked_combined.c maths.c rand.c`
    
 4) Now, for compiling the targeted program, [there](https://github.com/bristol-sca/thumb-sim)
    is a guidance, or the below commands can be used:
