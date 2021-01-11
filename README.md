@@ -300,7 +300,7 @@ like  **_C_ / _C++_ compiler GCC**. Here, the goal is
  project is "**arm-none-eabi**" toolchain and can be installed
  on **Ubuntu** by the below command:
 
-    `$ sudo apt-get install -y gcc-arm-none-eabi`
+`$ sudo apt-get install -y gcc-arm-none-eabi`
 
 For checking the installed version use this command: 
 
