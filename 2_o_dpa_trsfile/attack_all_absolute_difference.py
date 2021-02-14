@@ -161,6 +161,7 @@ if __name__ == "__main__":
     aes_attack = AESAttack()
     aes_attack.read_trs('2sh_16b_60_400.trs')
     print('The number of traces:', aes_attack.n_t)
+    print('The number of samples in a trace:', aes_attack.n_s)
     p_len = aes_attack.n_s_c_p
     plt.ion()
     fig = plt.figure()
