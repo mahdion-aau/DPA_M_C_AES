@@ -145,13 +145,15 @@ class AESAttack:
         self.phrase_plot(correct_key)
         self.plot_show('Samples', 'Correlation', 'Corr(HW, traces)', 'corr')
         print('The first byte of the key is:', hex(correct_key))
+        print('Dimensions of the Corr matrix: [{0} * {1}]'.format(len(corr), len(corr[0])))
         return [max_corr, hex(correct_key), corr]
 
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('trs90.trs')
+    aes_attack.read_trs('td5.trs')
     print('The number of traces:', aes_attack.n_t)
+    print('The number of plaintexts:', aes_attack.n_t)
     print('The number of samples in a trace:', aes_attack.n_s)
     hw_v = aes_attack.hw_model_all_p_key()
     leakage_traces = aes_attack.leakage_traces()
