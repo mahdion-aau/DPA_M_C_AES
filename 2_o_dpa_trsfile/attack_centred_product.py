@@ -158,6 +158,7 @@ if __name__ == "__main__":
     aes_attack.read_trs('2sh_60_200.trs')
     # mean_samp = aes_attack.mean_sample()
     print('The number of traces:', aes_attack.n_t)
+    print('The number of samples in a trace:', aes_attack.n_s)
     hw_v = aes_attack.hw_model_all_p_key()
     leakage_traces = aes_attack.leakage_traces()
     attack = aes_attack.attack_dpa(hw_v, leakage_traces)
