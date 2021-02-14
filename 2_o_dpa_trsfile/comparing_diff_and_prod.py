@@ -165,6 +165,7 @@ if __name__ == "__main__":
     aes_attack = AESAttack()
     aes_attack.read_trs('2sh_fc_300.trs')
     print('The number of traces:', aes_attack.n_t)
+    print('The number of samples in a trace:', aes_attack.n_s)
     # mean_samp = aes_attack.mean_sample()
     hw_v = aes_attack.hw_model_all_p_key()
     max_cor = []
