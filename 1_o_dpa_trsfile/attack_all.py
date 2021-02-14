@@ -114,7 +114,7 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('si_trs.trs')
+    aes_attack.read_trs('trs39.trs')
     p_len = int(aes_attack.len_p / 2)
     plt.ion()
     fig = plt.figure()
