@@ -113,6 +113,7 @@ class AESAttack:
         combined_traces = np.zeros((self.n_t, self.n_s_c_p))  # Array of centered_product_samples of each trace
         for i in range(self.n_t):
             combined_traces[i] = self.combining_trace(traces[i], mean_sam, combining_func)
+        print('The number of samples in a combined trace: {}'.format(len(combined_traces[0])))
         return combined_traces
 
     def leakage_traces(self, combining_func):
