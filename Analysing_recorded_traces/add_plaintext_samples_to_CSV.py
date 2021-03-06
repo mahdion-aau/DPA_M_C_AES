@@ -70,7 +70,7 @@ class TRS:
 
 
 if __name__ == "__main__":
-    trs = TRS('trsb6.trs')  # The name of the trs file (name.trs)
+    trs = TRS('trs90.trs')  # The name of the trs file (name.trs)
     with open('b6.csv', mode='w') as fpt:
         fpt = csv.writer(fpt, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         trs.plot_initial()

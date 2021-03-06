@@ -111,7 +111,7 @@ class AESAttack:
 
 if __name__ == "__main__":
     aes_attack = AESAttack()
-    aes_attack.read_trs('trs73.trs')
+    aes_attack.read_trs('td5.trs')
     hw_v = aes_attack.hw_model_all_p_key()
     leakage_traces = aes_attack.leakage_traces()
     attack = aes_attack.attack_dpa(hw_v, leakage_traces)
