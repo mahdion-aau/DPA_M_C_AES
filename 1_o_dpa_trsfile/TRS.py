@@ -69,7 +69,7 @@ class TRS:
 
 
 if __name__ == "__main__":
-    trs = TRS('td5.trs')  # The name of the trs file (name.trs)
+    trs = TRS('2in_16_byte.trs')  # The name of the trs file (name.trs)
 
     trs.plot_initial()
     for i in range(trs.number_of_traces):
