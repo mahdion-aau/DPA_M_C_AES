@@ -62,16 +62,17 @@ class Leakage_Ditection:
                 '{:0.2f}'.format(np.std(trace[i]))))
             bins_list = [j for j in range(min(trace[i])-1 , max(trace[i])+2)]
             plt.hist(trace[i], bins = bins_list, alpha= 0.7, label = "Input {}".format( i+1))
-            plt.axvline(trace[i].mean(), color=color_mean_line[i], linestyle='dashed', linewidth=1)
-        text_1 = "$\mu_1=%.2f$ {:f}".format(trace[0].mean())  + "\n$\sigma_1=%.2f$ {:f}".format(trace[0].std())
-        text_2=  "$\mu_2=%.2f$ {:f}".format( trace[1].mean()) +"\n$\sigma_2=%.2f$ {:f}".format(trace[1].std())
+            plt.axvline(trace[i].mean(), color=color_mean_line[i],
+                        linestyle='dashed', linewidth=1)
 
-        plt.text(20, 2500, text_1, size=10,
-                 va="baseline", ha="left", multialignment="left",
-                 bbox=dict(fc="none"))
-        plt.text(20, 1900, text_2, size=10,
-                 va="baseline", ha="left", multialignment="left",
-                 bbox=dict(fc="none"))
+            plt.text(6.5, 3750, 'mean', color='red')
+        text_1 = "$\mu_1=%.2f$ {:f}".format(trace[0].mean()) \
+                 + "\n$\sigma_1=%.2f$ {:f}".format(trace[0].std())
+        text_2 = "$\mu_2=%.2f$ {:f}".format( trace[1].mean())\
+                 +"\n$\sigma_2=%.2f$ {:f}".format(trace[1].std())
+
+        plt.text(20, 2500, text_1, bbox=dict(fc="none"))
+        plt.text(20, 1900, text_2, bbox=dict(fc="none"))
 
         plt.ylabel('Frequency')
         plt.xlabel('Power (observed values)')
