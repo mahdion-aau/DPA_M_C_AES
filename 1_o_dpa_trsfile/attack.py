@@ -71,7 +71,7 @@ class AESAttack:
 
     def pearson_corr(self, hw_ve, leak_trc):
         """ When all elements of each input of pearsonr is the same, the output of pearsonr is Nan,
-         so there is a warning for solving this warning pearson_check function is defined"""
+         so there is a warning for solving this warning all_samepearson_check function is defined"""
 
         def all_same(in_array):
             return all(x == in_array[0] for x in in_array)
